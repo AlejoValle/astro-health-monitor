@@ -1,16 +1,14 @@
-import { ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Indicator } from '../data/indicators'
-import { sourceById } from '../data/sources'
 import { assess, formatValue } from '../lib/rules'
 import { STATUS_STYLE } from '../lib/statusStyle'
 import { ContactBanner } from './ContactBanner'
+import { SourceList } from './SourceList'
 import { StatusIcon } from './status'
 
 export function ResultPanel({ indicator, values }: { indicator: Indicator; values: number[] }) {
   const assessment = assess(indicator.id, values)
   const style = STATUS_STYLE[assessment.status]
-  const sources = indicator.sourceIds.flatMap((id) => sourceById(id) ?? [])
 
   return (
     <div className="space-y-4">
@@ -41,24 +39,7 @@ export function ResultPanel({ indicator, values }: { indicator: Indicator; value
         <h2 className="label">Why we check this</h2>
         <p className="mt-2 text-sm text-ink-dim">{indicator.why}</p>
         <h2 className="label mt-4">Based on</h2>
-        <ul className="mt-2 space-y-2">
-          {sources.map((source) => (
-            <li key={source.id}>
-              <a
-                href={source.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex min-h-12 items-center gap-3 text-sm"
-              >
-                <span className="flex-1">
-                  <span className="block text-ink-dim">{source.org}</span>
-                  <span className="block">{source.title}</span>
-                </span>
-                <ExternalLink size={16} className="shrink-0 text-ink-faint" aria-hidden />
-              </a>
-            </li>
-          ))}
-        </ul>
+        <SourceList sourceIds={indicator.sourceIds} />
         <p className="mt-3 text-xs text-ink-faint">Guidance for self-care, not a medical diagnosis.</p>
       </section>
 

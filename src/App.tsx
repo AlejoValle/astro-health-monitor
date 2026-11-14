@@ -3,6 +3,7 @@ import { AppShell } from './components/AppShell'
 import { ComingSoon } from './screens/ComingSoon'
 import { Home } from './screens/Home'
 import { Measure } from './screens/Measure'
+import { Symptoms } from './screens/Symptoms'
 
 export default function App() {
   return (
@@ -12,7 +13,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="measure" element={<Measure />} />
           <Route path="mind" element={<ComingSoon title="Mind check" />} />
-          <Route path="symptoms" element={<ComingSoon title="Symptoms" />} />
+          <Route path="symptoms" element={<Symptoms />} />
           <Route path="exercise" element={<ComingSoon title="Exercise" />} />
           <Route path="sounds" element={<ComingSoon title="Sounds" />} />
           <Route path="sources" element={<ComingSoon title="Sources" />} />

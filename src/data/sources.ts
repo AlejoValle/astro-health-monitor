@@ -36,6 +36,27 @@ export const SOURCES: Source[] = [
     kind: 'nasa',
   },
   {
+    id: 'nasa-sas',
+    org: 'NASA Office of the Chief Health and Medical Officer',
+    title: 'Space Adaptation Sickness technical brief',
+    url: 'https://www.nasa.gov/wp-content/uploads/2025/09/ochmo-mtb-004-space-adaptation-sickness-sas.pdf',
+    kind: 'nasa',
+  },
+  {
+    id: 'nasa-medcare',
+    org: 'NASA Office of the Chief Health and Medical Officer',
+    title: 'Spaceflight Experience and Medical Care technical brief',
+    url: 'https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf',
+    kind: 'nasa',
+  },
+  {
+    id: 'nasa-sans',
+    org: 'NASA Human Research Program',
+    title: 'Risk of Spaceflight Associated Neuro-ocular Syndrome (SANS)',
+    url: 'https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/',
+    kind: 'nasa',
+  },
+  {
     id: 'aha-bp',
     org: 'American Heart Association',
     title: 'Understanding Blood Pressure Readings',
@@ -47,6 +68,13 @@ export const SOURCES: Source[] = [
     org: 'American Heart Association',
     title: 'All About Heart Rate',
     url: 'https://www.heart.org/en/health-topics/high-blood-pressure/the-facts-about-high-blood-pressure/all-about-heart-rate-pulse',
+    kind: 'clinical',
+  },
+  {
+    id: 'aha-heart-attack',
+    org: 'American Heart Association',
+    title: 'Warning Signs of a Heart Attack',
+    url: 'https://www.heart.org/en/health-topics/heart-attack/warning-signs-of-a-heart-attack',
     kind: 'clinical',
   },
   {
@@ -66,7 +94,7 @@ export const SOURCES: Source[] = [
   {
     id: 'cdc-fever',
     org: 'Centers for Disease Control and Prevention',
-    title: 'Reporting Death or Illness on Ships (fever definition)',
+    title: 'Reporting Death or Illness on Ships (fever and ill person definitions)',
     url: 'https://www.cdc.gov/port-health/php/maritime-guidance/reporting-death-or-illness-on-ships.html',
     kind: 'clinical',
   },
