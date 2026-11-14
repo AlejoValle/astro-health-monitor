@@ -5,6 +5,7 @@ import { Exercise } from './screens/Exercise'
 import { Home } from './screens/Home'
 import { Measure } from './screens/Measure'
 import { Mind } from './screens/Mind'
+import { Sounds } from './screens/Sounds'
 import { Symptoms } from './screens/Symptoms'
 
 export default function App() {
@@ -17,7 +18,7 @@ export default function App() {
           <Route path="mind" element={<Mind />} />
           <Route path="symptoms" element={<Symptoms />} />
           <Route path="exercise" element={<Exercise />} />
-          <Route path="sounds" element={<ComingSoon title="Sounds" />} />
+          <Route path="sounds" element={<Sounds />} />
           <Route path="sources" element={<ComingSoon title="Sources" />} />
         </Route>
       </Routes>
