@@ -57,6 +57,13 @@ export const SOURCES: Source[] = [
     kind: 'nasa',
   },
   {
+    id: 'pvt-b',
+    org: 'Basner, Mollicone and Dinges, Acta Astronautica (2011)',
+    title: 'Validity and Sensitivity of a Brief Psychomotor Vigilance Test (PVT-B)',
+    url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC3197786/',
+    kind: 'clinical',
+  },
+  {
     id: 'aha-bp',
     org: 'American Heart Association',
     title: 'Understanding Blood Pressure Readings',
