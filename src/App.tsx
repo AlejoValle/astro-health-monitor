@@ -1,6 +1,7 @@
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
 import { ComingSoon } from './screens/ComingSoon'
+import { Exercise } from './screens/Exercise'
 import { Home } from './screens/Home'
 import { Measure } from './screens/Measure'
 import { Mind } from './screens/Mind'
@@ -15,7 +16,7 @@ export default function App() {
           <Route path="measure" element={<Measure />} />
           <Route path="mind" element={<Mind />} />
           <Route path="symptoms" element={<Symptoms />} />
-          <Route path="exercise" element={<ComingSoon title="Exercise" />} />
+          <Route path="exercise" element={<Exercise />} />
           <Route path="sounds" element={<ComingSoon title="Sounds" />} />
           <Route path="sources" element={<ComingSoon title="Sources" />} />
         </Route>

@@ -57,6 +57,20 @@ export const SOURCES: Source[] = [
     kind: 'nasa',
   },
   {
+    id: 'nasa-exercise',
+    org: 'NASA International Space Station Research',
+    title: 'Astronaut Exercise',
+    url: 'https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/',
+    kind: 'nasa',
+  },
+  {
+    id: 'nasa-bone-muscle',
+    org: 'NASA International Space Station Research',
+    title: 'Counteracting Bone and Muscle Loss in Microgravity',
+    url: 'https://www.nasa.gov/missions/station/iss-research/counteracting-bone-and-muscle-loss-in-microgravity/',
+    kind: 'nasa',
+  },
+  {
     id: 'pvt-b',
     org: 'Basner, Mollicone and Dinges, Acta Astronautica (2011)',
     title: 'Validity and Sensitivity of a Brief Psychomotor Vigilance Test (PVT-B)',

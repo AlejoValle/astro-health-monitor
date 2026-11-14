@@ -1,5 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie'
 import type { IndicatorId } from '../data/indicators'
+import type { LocationId } from '../data/locations'
 
 export interface Reading {
   id: number
@@ -20,9 +21,18 @@ export interface MindCheck {
   responses?: number
 }
 
+export interface Workout {
+  id: number
+  at: number
+  locationId: LocationId
+  blockId: string
+  minutes: number
+}
+
 export const db = new Dexie('astrovitals') as Dexie & {
   readings: EntityTable<Reading, 'id'>
   checks: EntityTable<MindCheck, 'id'>
+  workouts: EntityTable<Workout, 'id'>
 }
 
 db.version(1).stores({
@@ -31,6 +41,9 @@ db.version(1).stores({
 db.version(2).stores({
   checks: '++id, [kind+at]',
 })
+db.version(3).stores({
+  workouts: '++id, at',
+})
 
 export function addReading(indicatorId: IndicatorId, values: number[], origin: Reading['origin'] = 'manual') {
   return db.readings.add({ indicatorId, values, at: Date.now(), origin })
@@ -38,4 +51,8 @@ export function addReading(indicatorId: IndicatorId, values: number[], origin: R
 
 export function addCheck(check: Omit<MindCheck, 'id' | 'at'>) {
   return db.checks.add({ ...check, at: Date.now() })
+}
+
+export function addWorkout(workout: Omit<Workout, 'id' | 'at'>) {
+  return db.workouts.add({ ...workout, at: Date.now() })
 }
