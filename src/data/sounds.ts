@@ -10,7 +10,7 @@ export const SOUNDS: Sound[] = [
   { id: 'rain', name: 'Rain', hint: 'Steady rainfall' },
   { id: 'waves', name: 'Ocean waves', hint: 'Slow swell, in and out' },
   { id: 'wind', name: 'Wind', hint: 'Soft gusts' },
-  { id: 'brown', name: 'Deep noise', hint: 'Low rumble that masks cabin noise' },
+  { id: 'brown', name: 'Deep noise', hint: 'Low, steady rumble' },
   { id: 'pink', name: 'Soft noise', hint: 'Even hiss for focus or sleep' },
   { id: 'drone', name: 'Calm tone', hint: 'A slow, warm hum' },
 ]

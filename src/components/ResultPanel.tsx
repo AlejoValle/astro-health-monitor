@@ -44,8 +44,11 @@ export function ResultPanel({ indicator, values }: { indicator: Indicator; value
       </section>
 
       <div className="grid grid-cols-2 gap-3">
-        <Link to="/measure" className="panel flex min-h-14 items-center justify-center rounded-2xl font-medium">
-          Measure more
+        <Link
+          to={`/trends?i=${indicator.id}`}
+          className="panel flex min-h-14 items-center justify-center rounded-2xl font-medium"
+        >
+          See trend
         </Link>
         <Link to="/" className="flex min-h-14 items-center justify-center rounded-2xl bg-ink font-semibold text-space">
           Done

@@ -1,4 +1,4 @@
-import { AudioLines, BookOpen, ChevronRight, FlaskConical } from 'lucide-react'
+import { AudioLines, BookOpen, ChartLine, FlaskConical } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ContactBanner } from '../components/ContactBanner'
 import { IndicatorCard } from '../components/IndicatorCard'
@@ -6,6 +6,7 @@ import { StatusIcon } from '../components/status'
 import { INDICATORS } from '../data/indicators'
 import { assess, worst, type Status } from '../lib/rules'
 import { clearSimulatedMission, loadSimulatedMission } from '../lib/seed'
+import { useSoundPlayer } from '../lib/soundPlayer'
 import { STATUS_STYLE } from '../lib/statusStyle'
 import { useLatest } from '../lib/useLatest'
 
@@ -15,8 +16,15 @@ const HEADLINE: Record<Status, string> = {
   alert: 'Act now',
 }
 
+const QUICK_LINKS = [
+  { to: '/trends', label: 'Trends', icon: ChartLine },
+  { to: '/sounds', label: 'Sounds', icon: AudioLines },
+  { to: '/sources', label: 'Sources', icon: BookOpen },
+]
+
 export function Home() {
   const latest = useLatest()
+  const soundPlaying = useSoundPlayer((s) => s.playing !== null)
 
   if (!latest) return null
 
@@ -80,17 +88,13 @@ export function Home() {
           </ContactBanner>
         )}
 
-        <section className="grid grid-cols-2 gap-3">
-          <Link to="/sounds" className="panel flex min-h-16 items-center gap-3 rounded-2xl px-4">
-            <AudioLines size={20} strokeWidth={1.75} className="text-accent" aria-hidden />
-            <span className="flex-1 text-sm font-medium">Sounds</span>
-            <ChevronRight size={16} className="text-ink-faint" aria-hidden />
-          </Link>
-          <Link to="/sources" className="panel flex min-h-16 items-center gap-3 rounded-2xl px-4">
-            <BookOpen size={20} strokeWidth={1.75} className="text-accent" aria-hidden />
-            <span className="flex-1 text-sm font-medium">Sources</span>
-            <ChevronRight size={16} className="text-ink-faint" aria-hidden />
-          </Link>
+        <section className="grid grid-cols-3 gap-3">
+          {QUICK_LINKS.map(({ to, label, icon: Icon }) => (
+            <Link key={to} to={to} className="panel flex min-h-20 flex-col items-center justify-center gap-2 rounded-2xl">
+              <Icon size={22} strokeWidth={1.75} className="text-accent" aria-hidden />
+              <span className="text-sm font-medium">{to === '/sounds' && soundPlaying ? 'Playing' : label}</span>
+            </Link>
+          ))}
         </section>
       </div>
 

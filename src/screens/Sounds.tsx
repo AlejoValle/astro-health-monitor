@@ -16,7 +16,7 @@ const ICON: Record<SoundId, LucideIcon> = {
 }
 
 export function Sounds() {
-  const { playing, volume, endsAt, toggle, setVolume, setTimer } = useSoundPlayer()
+  const { playing, volume, endsAt, timerMinutes, toggle, setVolume, setTimer } = useSoundPlayer()
   const minutesLeft = useMinutesLeft(endsAt)
 
   if (!audioSupported()) {
@@ -93,7 +93,7 @@ export function Sounds() {
               Off
             </TimerChip>
             {TIMER_MINUTES.map((minutes) => (
-              <TimerChip key={minutes} active={false} disabled={!playing} onClick={() => setTimer(minutes)}>
+              <TimerChip key={minutes} active={timerMinutes === minutes} disabled={!playing} onClick={() => setTimer(minutes)}>
                 {minutes} min
               </TimerChip>
             ))}
