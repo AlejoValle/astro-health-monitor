@@ -51,7 +51,7 @@ export function Trends() {
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{indicator.name}</h1>
       </div>
 
-      <nav aria-label="Indicator" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+      <nav aria-label="Indicator" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
         {INDICATORS.map((i) => {
           const Icon = INDICATOR_ICON[i.id]
           const active = i.id === id
@@ -212,7 +212,7 @@ function TrendBody({ id, readings }: { id: IndicatorId; readings: { at: number; 
             .map((r) => (
               <li key={r.at} className="flex min-h-12 items-center gap-3 py-2">
                 <span className="w-16 text-sm text-ink-dim">{day(r.at)}</span>
-                <span className="flex-1 font-semibold tabular-nums">
+                <span className="flex-1 whitespace-nowrap font-semibold tabular-nums">
                   {formatValue(id, r.values)} <span className="text-sm font-normal text-ink-dim">{indicator.unit}</span>
                 </span>
                 <StatusPill status={r.status} label={assess(id, r.values).label} />
