@@ -85,7 +85,52 @@ function MindHub() {
           assessment={lastReaction && assessReaction(toSummary(lastReaction), baselineOf(reaction.slice(0, -1)))}
         />
       </ul>
+      <History stress={stress} reaction={reaction} />
     </div>
+  )
+}
+
+const HISTORY_LENGTH = 6
+const when = (at: number) =>
+  new Date(at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+
+function History({ stress, reaction }: { stress: MindCheck[]; reaction: MindCheck[] }) {
+  const entries = [
+    ...stress.map((c) => ({
+      at: c.at,
+      name: 'Stress check',
+      value: `${c.score} / ${STRESS_MAX}`,
+      assessment: assessStress(c.score),
+    })),
+    // Each reaction test is rated against the tests taken before it.
+    ...reaction.map((c, i) => ({
+      at: c.at,
+      name: 'Reaction test',
+      value: `${c.score} ms`,
+      assessment: assessReaction(toSummary(c), baselineOf(reaction.slice(0, i))),
+    })),
+  ]
+    .sort((a, b) => b.at - a.at)
+    .slice(0, HISTORY_LENGTH)
+  if (entries.length === 0) return null
+
+  return (
+    <section className="panel mt-4 rounded-3xl p-5">
+      <h2 className="label">Earlier results</h2>
+      <ul className="mt-2 divide-y divide-line">
+        {entries.map((e) => (
+          <li key={`${e.name}-${e.at}`} className="flex min-h-14 items-center gap-3 py-2">
+            <span className="flex-1">
+              <span className="block font-medium">
+                {e.name} <span className="whitespace-nowrap font-semibold tabular-nums">{e.value}</span>
+              </span>
+              <span className="block text-xs text-ink-dim">{when(e.at)}</span>
+            </span>
+            <StatusPill status={e.assessment.status} label={e.assessment.label} />
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
 

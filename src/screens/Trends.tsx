@@ -31,9 +31,10 @@ export function Trends() {
   const requested = params.get('i')
   const id: IndicatorId = isIndicatorId(requested) ? requested : 'hr'
   const indicator = indicatorById(id)
-  const readings = useLiveQuery(
-    async () =>
-      (
+  const loaded = useLiveQuery(
+    async () => ({
+      id,
+      readings: (
         await db.readings
           .where('[indicatorId+at]')
           .between([id, Dexie.minKey], [id, Dexie.maxKey])
@@ -41,8 +42,11 @@ export function Trends() {
           .limit(MAX_READINGS)
           .toArray()
       ).reverse(),
+    }),
     [id],
   )
+  // useLiveQuery keeps the previous indicator's result until the new query resolves.
+  const readings = loaded?.id === id ? loaded.readings : undefined
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
@@ -84,15 +88,22 @@ export function Trends() {
         </section>
       )}
 
-      {readings && readings.length > 0 && <TrendBody id={id} readings={readings} />}
+      {readings && readings.length > 0 && <TrendBody key={id} id={id} readings={readings} />}
     </div>
   )
 }
 
-function TrendBody({ id, readings }: { id: IndicatorId; readings: { at: number; values: number[]; origin: string }[] }) {
+interface Row {
+  at: number
+  values: number[]
+  origin: string
+  status: Status
+}
+
+function TrendBody({ id, readings }: { id: IndicatorId; readings: Omit<Row, 'status'>[] }) {
   const indicator = indicatorById(id)
   const ranges = OK_RANGES[id]
-  const rows = readings.map((r) => ({ ...r, status: assess(id, r.values).status }))
+  const rows: Row[] = readings.map((r) => ({ ...r, status: assess(id, r.values).status }))
   const outside = rows.filter((r) => r.status !== 'ok').length
   const trend = direction(rows.map((r) => r.values[0]), MIN_CHANGE[id])
   const simulated = rows.some((r) => r.origin === 'simulated')
@@ -171,17 +182,17 @@ function TrendBody({ id, readings }: { id: IndicatorId; readings: { at: number; 
               {indicator.fields.map((f, field) => (
                 <Line
                   key={f.key}
-                  dataKey={(row: (typeof rows)[number]) => row.values[field]}
+                  dataKey={(row: Row) => row.values[field]}
                   stroke={LINE_COLOR[field]}
                   strokeWidth={2}
                   isAnimationActive={false}
-                  dot={({ cx, cy, index }: { cx?: number; cy?: number; index?: number }) => (
+                  dot={({ cx, cy, index, payload }: { cx?: number; cy?: number; index?: number; payload?: Row }) => (
                     <circle
                       key={index}
                       cx={cx}
                       cy={cy}
                       r={3.5}
-                      fill={STATUS_COLOR[rows[index ?? 0].status]}
+                      fill={payload ? STATUS_COLOR[payload.status] : 'var(--color-ink-dim)'}
                       stroke="var(--color-panel)"
                     />
                   )}

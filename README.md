@@ -29,7 +29,7 @@ The mission location is chosen in the header: Earth orbit, deep space transit, l
 - **Symptom tree as data.** The triage tree in `src/data/symptomTree.ts` has 5 body areas, 20 questions and 19 outcomes. A generic engine in `src/lib/triage.ts` walks it, and a test checks that every path ends in an outcome with a source.
 - **Bluetooth with a manual fallback.** Heart rate uses the standard Bluetooth Heart Rate Service through Web Bluetooth. Manual entry is always available.
 - **Sounds without audio files.** The six sounds are generated on the device with the Web Audio API.
-- **Simulated demo data.** On first launch the app loads 14 days of simulated readings so the charts are not empty. They are labelled "Simulated data" wherever they appear.
+- **Simulated demo data.** The app starts empty. "Load a simulated 14-day mission" on the Home screen fills it with simulated readings for a demo. They are labelled "Simulated data" wherever they appear.
 
 ## NASA resources used
 
