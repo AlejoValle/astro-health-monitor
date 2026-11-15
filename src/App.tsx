@@ -5,6 +5,10 @@ import { Alerts } from './screens/Alerts'
 import { BodyMap } from './screens/BodyMap'
 import { Crew } from './screens/Crew'
 import { Games } from './screens/Games'
+import { Control } from './screens/Control'
+import { CheckIn } from './screens/CheckIn'
+import { Timeline } from './screens/Timeline'
+import { Earth } from './screens/Earth'
 import { Scenarios } from './screens/Scenarios'
 import { DeviceStage, DeviceSwitcher } from './components/DevicePreview'
 import { IntroSplash } from './components/IntroSplash'
@@ -54,6 +58,10 @@ export default function App() {
                 <Route path="body" element={<BodyMap />} />
                 <Route path="crew" element={<Crew />} />
                 <Route path="games" element={<Games />} />
+                <Route path="control" element={<Control />} />
+                <Route path="checkin" element={<CheckIn />} />
+                <Route path="timeline" element={<Timeline />} />
+                <Route path="earth" element={<Earth />} />
                 <Route path="scenarios" element={<Scenarios />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>

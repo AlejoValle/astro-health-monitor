@@ -5,7 +5,7 @@ import type { RoleId } from '../lib/profiles'
 // Use cases: demo crew members whose last 14 days tell a story, to show how Tether reacts to
 // different conditions. All data is simulated and labelled as such.
 
-export type ScenarioId = 'healthy' | 'infection' | 'lowmood' | 'sleep' | 'pressure' | 'radiation' | 'deconditioning'
+export type ScenarioId = 'healthy' | 'infection' | 'lowmood' | 'sleep' | 'pressure' | 'radiation' | 'deconditioning' | 'apollo15'
 
 export interface ScenarioData {
   readings: { indicatorId: IndicatorId; at: number; values: number[]; origin: 'simulated' }[]
@@ -30,6 +30,9 @@ export interface Scenario {
   priorDoseMSv: number
   /** Alert ids the data must trigger; checked by a test. */
   expectAlerts: string[]
+  /** A real case from spaceflight history, rebuilt with simulated numbers. */
+  historical?: boolean
+  sourceIds?: string[]
   build: (now: number) => ScenarioData
 }
 
@@ -277,6 +280,37 @@ export const SCENARIOS: Scenario[] = [
       readings: days(now, 7, steadyVitals),
       checks: [],
       workouts: workouts(now, 'mars', (d) => (d > 9 ? 60 : 12)),
+      doses: [],
+    }),
+  },
+  {
+    id: 'apollo15',
+    person: 'Apollo 15 LMP (1971)',
+    role: 'pilot',
+    title: 'Historical case: Apollo 15',
+    story:
+      'On Apollo 15, flight surgeons saw irregular heartbeats in the crew after long, hard days of work on the lunar surface. NASA lists the cause as undetermined, possibly linked to low potassium. The numbers here are a reconstruction for the demo, not the real flight data.',
+    reactions: [
+      'An early warning that his resting heart rate, climbing during the days on the surface, will leave the normal range within days.',
+      'Short sleep between moonwalks becomes a sleep debt warning.',
+      'Tether cannot read a heart rhythm, so it sends palpitations to the symptom guide and the flight surgeon, and the report carries the trend.',
+      'Since Apollo 16, crews drank potassium-rich drinks: the kind of follow-up a warning like this should start.',
+    ],
+    location: 'moon',
+    missionDays: 11,
+    priorDoseMSv: 0,
+    expectAlerts: ['projection-hr', 'pattern-sleep-debt'],
+    historical: true,
+    sourceIds: ['nasa-apollo-medical'],
+    build: (now) => ({
+      readings: days(now, 8, {
+        ...steadyVitals,
+        hr: (p, j) => [round(p > 0.55 ? 64 + (p - 0.55) * 70 + j(2) : 63 + j(2))],
+        sleep: (p, j) => [round(p > 0.55 ? 5.2 + j(0.3) : 7.2 + j(0.3), 0.5)],
+        mood: (p, j) => [clampMood(4.2 - (p > 0.55 ? 0.8 : 0) + j(0.3))],
+      }),
+      checks: [],
+      workouts: workouts(now, 'moon', () => 120),
       doses: [],
     }),
   },

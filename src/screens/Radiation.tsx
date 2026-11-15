@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { motion } from 'motion/react'
 import { ContactBanner } from '../components/ContactBanner'
 import { DataBadge } from '../components/DataBadge'
+import { DosePlanner } from '../components/DosePlanner'
+import { StormSimulator } from '../components/StormSimulator'
 import { SpaceWeatherCard } from '../components/SpaceWeatherCard'
 import { CountUp } from '../components/CountUp'
 import { NumberField } from '../components/NumberField'
@@ -64,6 +66,7 @@ export function Radiation() {
   const locationId = useSettings((s) => s.locationId)
   const t = useT()
   const locale = useLocale()
+  const [drill, setDrill] = useState(0)
   if (!state) return null
   const { estimate, career, measured, rate, overall, doses, simulated } = state
   const location = locationById(locationId)
@@ -141,8 +144,21 @@ export function Radiation() {
       {/* Opens by itself when NASA reports solar particles arriving. */}
       {(() => {
         const urgent = !!weather.data && assessSpaceWeather(weather.data.events, now, locationId).status === 'alert'
-        return <StormProtocol key={String(urgent)} urgent={urgent} />
+        return (
+          <div id="storm-protocol" className="scroll-mt-24">
+            <StormProtocol key={`${urgent}-${drill}`} urgent={urgent || drill > 0} drill={drill > 0} />
+          </div>
+        )
       })()}
+
+      <StormSimulator
+        onDrill={() => {
+          setDrill((d) => d + 1)
+          requestAnimationFrame(() => document.getElementById('storm-protocol')?.scrollIntoView({ behavior: 'smooth' }))
+        }}
+      />
+
+      <DosePlanner />
 
       <section className="panel rounded-3xl p-5">
         <div className="flex items-center justify-between gap-2">
@@ -276,7 +292,7 @@ function RateRow() {
   )
 }
 
-function StormProtocol({ urgent }: { urgent: boolean }) {
+function StormProtocol({ urgent, drill = false }: { urgent: boolean; drill?: boolean }) {
   const [open, setOpen] = useState(urgent)
   const locationId = useSettings((s) => s.locationId)
   const t = useT()
@@ -290,7 +306,7 @@ function StormProtocol({ urgent }: { urgent: boolean }) {
       >
         <ShieldAlert size={24} className="text-watch" aria-hidden />
         <span className="flex-1">
-          <span className="block font-semibold">{t('Solar storm alert?')}</span>
+          <span className="block font-semibold">{drill ? t('Shelter drill') : t('Solar storm alert?')}</span>
           <span className="block text-sm text-ink-dim">{t('What to do in the next minutes')}</span>
         </span>
         <span className="text-sm text-watch">{open ? t('Hide') : t('Show')}</span>

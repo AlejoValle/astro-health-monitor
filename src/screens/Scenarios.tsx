@@ -1,4 +1,5 @@
-import { ArrowRight, FlaskConical, Loader2, Trash2 } from 'lucide-react'
+import { ArrowRight, FlaskConical, History, Loader2, Trash2 } from 'lucide-react'
+import { SourceList } from '../components/SourceList'
 import { useState } from 'react'
 import { SCENARIOS, type Scenario } from '../data/scenarios'
 import { locationById } from '../data/locations'
@@ -82,7 +83,13 @@ export function Scenarios() {
                   </span>
                 )}
               </div>
+              {s.historical && (
+                <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-watch/50 bg-watch/10 px-2.5 py-1 text-xs text-watch">
+                  <History size={12} aria-hidden /> {t('Real case, reconstructed data')}
+                </span>
+              )}
               <p className="mt-3 text-sm">{t(s.story)}</p>
+              {s.sourceIds && <SourceList sourceIds={s.sourceIds} />}
               <h3 className="label mt-4">{t('How Tether reacts')}</h3>
               <ul className="mt-2 space-y-1.5 text-sm">
                 {s.reactions.map((r) => (

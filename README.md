@@ -15,13 +15,17 @@ Tether is a web app designed for a phone worn on the wrist. A crew member measur
 | --- | --- |
 | Home | Sees an overall status, the latest value of six indicators (heart rate, blood pressure, glucose, temperature, sleep and mood), the mission radiation dose and the five hazards at a glance |
 | Hazards | Sees NASA's five hazards of spaceflight, how much each weighs at the current location, its status from the crew member's own data, and the tools that track it |
-| Radiation | Logs the active dosimeter, sees the mission and career dose against NASA's 600 mSv limit, the expected dose rate at the location, and a solar storm protocol |
+| Radiation | Logs the active dosimeter, sees the mission and career dose against NASA's 600 mSv limit, the expected dose rate at the location, a solar storm protocol, a storm simulator for NOAA levels S1 to S5 with a shelter drill, and a planner that charts the career dose of a station, lunar or Mars mission |
 | Routine | Follows a morning, midday and evening routine that ticks itself off when a real measurement is logged, and earns points, rank, a streak and mission patches. Full days also grow a lettuce in a space garden, move a ship from Earth to the Moon, Mars and Jupiter, and count toward goals the whole crew reaches together |
 | Alerts | Sees early warnings found in their own history: streaks out of range, worsening trends, values heading out of range within a week, and combined patterns such as accumulated fatigue, sleep debt, early infection signs and exercise below target |
 | Report | Writes a note and copies, shares or downloads a plain-text report for the flight surgeon with vitals, warnings, radiation, exercise and mind checks, always in English for the ground team |
 | Body map | Taps a body system (brain, eyes, heart, immune, gut, bones, muscles) to see what it does, what space does to it, its status from the crew member's data, and filters by hazard |
+| Daily check-in | Logs sleep, mood and every vital on one screen in about a minute. Last values are filled in, but only the checks ticked as measured today are saved |
+| Mission control | Sees every crew member on the device at a glance, most urgent first: status, vitals, top warnings, career dose, routine today and when they last logged |
+| Mission timeline | Sees what the body goes through over a mission (motion sickness, fluid shift, bone loss, eye changes, isolation, readapting to gravity) with today's mission day marked and a source for each step |
+| Tether on Earth | Sees where the same ideas help on Earth: polar stations, submarines, offshore platforms, remote rural areas, expeditions and self-care at home |
 | Crew | Adds, edits, switches and removes crew profiles on a shared device; each has its own readings, routine, dose and settings |
-| Use cases | Opens demo crew members with 14 days of simulated data (healthy, early infection, isolation and low mood, sleep deprivation, rising blood pressure, solar storm exposure, skipping exercise) to see how Tether reacts |
+| Use cases | Opens demo crew members with 14 days of simulated data (healthy, early infection, isolation and low mood, sleep deprivation, rising blood pressure, solar storm exposure, skipping exercise, and a historical case rebuilt from Apollo 15) to see how Tether reacts |
 | Measure | Reads heart rate from a Bluetooth sensor, or types any reading by hand, with instructions on how to take it |
 | Symptoms | Taps the part of the body that feels wrong and answers yes/no questions to get a likely explanation, self-care steps and an escalation level |
 | Mind | Rates mood, answers a four-question stress check and takes a reaction test |
@@ -65,6 +69,8 @@ The mission location is chosen in the header: Earth orbit, deep space transit, l
 - [Space Adaptation Sickness](https://www.nasa.gov/wp-content/uploads/2025/09/ochmo-mtb-004-space-adaptation-sickness-sas.pdf), [Spaceflight Experience and Medical Care](https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf) and [Spaceflight Associated Neuro-ocular Syndrome](https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/): space-specific branches of the symptom tree.
 - [Cognition test battery](https://humanresearchroadmap.nasa.gov/): the idea behind the brain games (working memory with 2-Back, processing speed with symbol-digit). A drop of 15% from the crew member's own median is a watch, 30% is an action.
 - [Growing Plants in Space (Veggie)](https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/): the space garden that grows with the routine.
+- [NOAA Space Weather Scales](https://www.swpc.noaa.gov/noaa-scales-explanation), NOAA SWPC: proton flux, frequency and astronaut guidance for each solar radiation storm level in the simulator.
+- [Inflight Medical Problems in Apollo Crews](https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_18-45_Inflight_Medical_Problems.htm), from Biomedical Results of Apollo (SP-368): the irregular heartbeats behind the Apollo 15 case. Its numbers are a reconstruction, labelled as such.
 - [Hazard pages for each of the five hazards](https://www.nasa.gov/hrp/hazards/): the Hazards screen, one card per hazard.
 - [Moon 2 Mars Space Radiation Protection](https://ntrs.nasa.gov/citations/20250006168), NASA Technical Reports Server: expected dose rate at each location and solar condition, and expected dose from a large solar storm.
 - [NASA-STD-3001 Technical Brief: Design for Ionizing Radiation Protection](https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-020-radiation-protection.pdf): 600 mSv career limit, 250 mSv solar storm limit and the storm shelter steps.

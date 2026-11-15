@@ -1,4 +1,4 @@
-import { AudioLines, BellRing, BookOpen, ChartLine, ChevronRight, FileText, FlaskConical, PersonStanding, Users, Gamepad2 } from 'lucide-react'
+import { AudioLines, BellRing, BookOpen, ChartLine, ChevronRight, FileText, FlaskConical, PersonStanding, Users, Gamepad2, ClipboardCheck, MonitorDot, CalendarRange, Earth } from 'lucide-react'
 import { useT } from '../i18n'
 import { msg } from '../i18n/msg'
 import { Link } from 'react-router-dom'
@@ -32,6 +32,9 @@ const QUICK_LINKS = [
   { to: '/sounds', label: msg('Sounds'), icon: AudioLines },
   { to: '/sources', label: msg('Sources'), icon: BookOpen },
   { to: '/games', label: msg('Games'), icon: Gamepad2 },
+  { to: '/control', label: msg('Mission control'), icon: MonitorDot },
+  { to: '/timeline', label: msg('Timeline'), icon: CalendarRange },
+  { to: '/earth', label: msg('On Earth'), icon: Earth },
   { to: '/crew', label: msg('Crew'), icon: Users },
   { to: '/scenarios', label: msg('Use cases'), icon: FlaskConical },
 ]
@@ -115,6 +118,15 @@ export function Home() {
             </ul>
           </ContactBanner>
         )}
+
+        <Link to="/checkin" className="panel flex min-h-16 items-center gap-3 rounded-2xl px-4">
+          <ClipboardCheck size={22} strokeWidth={1.75} className="text-accent" aria-hidden />
+          <span className="flex-1">
+            <span className="block font-medium">{t('Daily check-in')}</span>
+            <span className="block text-xs text-ink-dim">{t('Every check on one screen, about 1 minute')}</span>
+          </span>
+          <ChevronRight size={18} className="text-ink-faint" aria-hidden />
+        </Link>
 
         <NextUpCard />
 

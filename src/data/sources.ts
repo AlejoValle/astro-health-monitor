@@ -92,6 +92,20 @@ export const SOURCES: Source[] = [
     kind: 'nasa',
   },
   {
+    id: 'noaa-scales',
+    org: 'NOAA Space Weather Prediction Center',
+    title: 'NOAA Space Weather Scales (solar radiation storms S1 to S5)',
+    url: 'https://www.swpc.noaa.gov/noaa-scales-explanation',
+    kind: 'partner',
+  },
+  {
+    id: 'nasa-apollo-medical',
+    org: 'NASA History',
+    title: 'Inflight Medical Problems in Apollo Crews (from Biomedical Results of Apollo, SP-368)',
+    url: 'https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_18-45_Inflight_Medical_Problems.htm',
+    kind: 'nasa',
+  },
+  {
     id: 'csa-radiation',
     org: 'Canadian Space Agency',
     title: 'Monitoring radiation for astronaut health',
