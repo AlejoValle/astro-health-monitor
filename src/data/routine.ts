@@ -1,3 +1,4 @@
+import type { CheckKind } from '../lib/db'
 import type { IndicatorId } from './indicators'
 
 // The routine, points, ranks and patches are this app's design, not a NASA schedule.
@@ -21,7 +22,7 @@ export const SLOT_LABEL: Record<Slot, string> = {
 /** What record completes a task. */
 export type TaskTarget =
   | { kind: 'reading'; indicator: IndicatorId }
-  | { kind: 'check'; check: 'stress' | 'reaction' }
+  | { kind: 'check'; check: CheckKind | CheckKind[] }
   | { kind: 'workout' }
   | { kind: 'dose' }
 
@@ -36,7 +37,12 @@ export interface RoutineTask {
   target: TaskTarget
   to: string
   xp: number
+  /** Bonus tasks earn points but do not count toward a full day. */
+  bonus?: boolean
 }
+
+/** A daily task that counts toward a full day and the streak. */
+export const isCoreDaily = (t: RoutineTask) => t.everyDays === 1 && !t.bonus
 
 export const ROUTINE: RoutineTask[] = [
   {
@@ -118,6 +124,27 @@ export const ROUTINE: RoutineTask[] = [
     target: { kind: 'check', check: 'reaction' },
     to: '/mind?v=reaction',
     xp: 30,
+  },
+  {
+    id: 'quiz',
+    label: 'Daily space quiz',
+    why: 'One question a day about health in space. A bonus.',
+    slot: 'midday',
+    everyDays: 1,
+    bonus: true,
+    target: { kind: 'check', check: 'quiz' },
+    to: '/games?g=quiz',
+    xp: 5,
+  },
+  {
+    id: 'brain',
+    label: 'Brain game',
+    why: 'Every 2 days, to track memory and speed against your own baseline.',
+    slot: 'evening',
+    everyDays: 2,
+    target: { kind: 'check', check: ['nback', 'dsst'] },
+    to: '/games',
+    xp: 20,
   },
   {
     id: 'dose',

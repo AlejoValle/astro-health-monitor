@@ -200,3 +200,22 @@ button.panel:active,
     animation: none;
   }
 }
+
+/* The Veggie lettuce sways gently while it is healthy. */
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+.plant-sway {
+  animation: sway 4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .plant-sway {
+    animation: none;
+  }
+}

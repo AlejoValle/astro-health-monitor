@@ -19,6 +19,7 @@ import { useRadiation } from '../lib/useRadiation'
 import { useNow, useRecords } from '../lib/useRecords'
 import { useRoutine } from '../lib/useRoutine'
 import { profileKey } from '../lib/profiles'
+import { isCoreDaily } from '../data/routine'
 
 const NOTE_KEY = profileKey('astrovitals-report-note')
 
@@ -50,7 +51,7 @@ function useReportInput(note: string): ReportInput | undefined {
   const reaction = reactions.at(-1)
   const target = planMinutes(EXERCISE_PLANS[locationId])
   const exercise = exerciseSummary(records.workouts, target, now)
-  const daily = routine.statuses.filter((s) => s.task.everyDays === 1)
+  const daily = routine.statuses.filter((s) => isCoreDaily(s.task))
 
   return {
     generatedAt: now,

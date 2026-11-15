@@ -4,6 +4,7 @@ import { AppShell } from './components/AppShell'
 import { Alerts } from './screens/Alerts'
 import { BodyMap } from './screens/BodyMap'
 import { Crew } from './screens/Crew'
+import { Games } from './screens/Games'
 import { Scenarios } from './screens/Scenarios'
 import { DeviceStage, DeviceSwitcher } from './components/DevicePreview'
 import { IntroSplash } from './components/IntroSplash'
@@ -52,6 +53,7 @@ export default function App() {
                 <Route path="report" element={<Report />} />
                 <Route path="body" element={<BodyMap />} />
                 <Route path="crew" element={<Crew />} />
+                <Route path="games" element={<Games />} />
                 <Route path="scenarios" element={<Scenarios />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>

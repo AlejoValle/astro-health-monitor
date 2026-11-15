@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, ListChecks, Smile, Timer, Wind } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ListChecks, Smile, Timer, Wind, Gamepad2 } from 'lucide-react'
 import { Breathing } from '../components/Breathing'
 import { useCallback, useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -16,7 +16,7 @@ import {
 import { useLocale, useT } from '../i18n'
 import { msg } from '../i18n/msg'
 import { addCheck, type MindCheck } from '../lib/db'
-import { baselineOf, toSummary, useChecks } from '../lib/mindChecks'
+import { baselineOf, toSummary, useChecks, useMindStatus } from '../lib/mindChecks'
 import { assessReaction, FULL_TEST_MS, LAPSE_MS, QUICK_TEST_MS, type ReactionSummary } from '../lib/reaction'
 import { assess, type Assessment } from '../lib/rules'
 import { STATUS_STYLE } from '../lib/statusStyle'
@@ -37,6 +37,7 @@ function MindHub() {
   const latest = useLatest()
   const stress = useChecks('stress')
   const reaction = useChecks('reaction')
+  const mind = useMindStatus()
   const t = useT()
   if (!latest || !stress || !reaction) return null
 
@@ -69,6 +70,13 @@ function MindHub() {
           title={msg('Reaction test')}
           hint={msg('A tap game that shows fatigue.')}
           assessment={lastReaction && assessReaction(toSummary(lastReaction), baselineOf(reaction.slice(0, -1)))}
+        />
+        <HubCard
+          to="/games"
+          icon={<Gamepad2 size={26} strokeWidth={1.5} />}
+          title={msg('Brain games')}
+          hint={msg('Memory and speed games modelled on NASA Cognition tests.')}
+          assessment={mind?.cognition}
         />
         <HubCard
           to="/mind?v=breathe"

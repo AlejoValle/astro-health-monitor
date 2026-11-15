@@ -4,6 +4,7 @@ import { SLOT_LABEL } from '../data/routine'
 import { useT } from '../i18n'
 import { nextUp } from '../lib/routine'
 import { useRoutine } from '../lib/useRoutine'
+import { isCoreDaily } from '../data/routine'
 
 /** Home reminder: the next routine task, plus streak and rank at a glance. */
 export function NextUpCard() {
@@ -12,7 +13,7 @@ export function NextUpCard() {
   if (!routine) return null
   const { statuses, progress } = routine
   const next = nextUp(statuses)
-  const daily = statuses.filter((s) => s.task.everyDays === 1)
+  const daily = statuses.filter((s) => isCoreDaily(s.task))
   const dailyDone = daily.filter((s) => s.state === 'done').length
 
   return (

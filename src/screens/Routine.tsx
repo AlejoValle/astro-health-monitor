@@ -9,6 +9,11 @@ import { missionDay, type TaskStatus } from '../lib/routine'
 import { notificationsAvailable } from '../lib/reminders'
 import { useSettings } from '../lib/store'
 import { useRoutine } from '../lib/useRoutine'
+import { isCoreDaily } from '../data/routine'
+import { CrewGoals } from '../components/CrewGoals'
+import { JourneyMap } from '../components/JourneyMap'
+import { VeggieGarden } from '../components/VeggieGarden'
+import { journey, plantState } from '../lib/garden'
 
 const SLOTS: Slot[] = ['morning', 'midday', 'evening']
 
@@ -22,7 +27,7 @@ export function Routine() {
   const { statuses, progress, now, simulated } = routine
 
   const day = missionDay(missionStart, now)
-  const daily = statuses.filter((s) => s.task.everyDays === 1)
+  const daily = statuses.filter((s) => isCoreDaily(s.task))
   const dailyDone = daily.filter((s) => s.state === 'done').length
   const rankIndex = RANKS.findIndex((r) => r.name === progress.rank.name)
   const next = progress.rank.next
@@ -122,6 +127,10 @@ export function Routine() {
           </section>
         )
       })}
+
+      <VeggieGarden plant={plantState(progress.fullDays, now)} />
+      <JourneyMap journey={journey(progress.fullDays.size)} />
+      <CrewGoals />
 
       <section className="panel rounded-3xl p-5">
         <div className="flex items-baseline justify-between">

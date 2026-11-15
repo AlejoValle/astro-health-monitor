@@ -11,6 +11,7 @@ export type Tracker =
   | { kind: 'stress' }
   | { kind: 'reaction' }
   | { kind: 'exercise' }
+  | { kind: 'cognition' }
   | { kind: 'link'; to: string; label: string }
 
 /** How strongly the hazard weighs at a location: 1 lower, 2 moderate, 3 higher. App's own synthesis. */
@@ -60,6 +61,7 @@ export const HAZARDS: Hazard[] = [
       { kind: 'indicator', id: 'sleep' },
       { kind: 'stress' },
       { kind: 'reaction' },
+      { kind: 'cognition' },
     ],
     sourceIds: ['hrp-isolation', 'hrp-hazards'],
   },

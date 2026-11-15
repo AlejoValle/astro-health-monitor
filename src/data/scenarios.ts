@@ -9,7 +9,7 @@ export type ScenarioId = 'healthy' | 'infection' | 'lowmood' | 'sleep' | 'pressu
 
 export interface ScenarioData {
   readings: { indicatorId: IndicatorId; at: number; values: number[]; origin: 'simulated' }[]
-  checks: { kind: 'stress' | 'reaction'; at: number; score: number; lapses?: number; falseStarts?: number; responses?: number; origin: 'simulated' }[]
+  checks: { kind: 'stress' | 'reaction' | 'nback' | 'dsst' | 'quiz'; at: number; score: number; lapses?: number; falseStarts?: number; responses?: number; origin: 'simulated' }[]
   workouts: { at: number; locationId: LocationId; blockId: string; minutes: number; origin: 'simulated' }[]
   doses: { at: number; mSv: number; origin: 'simulated' }[]
 }

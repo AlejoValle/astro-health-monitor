@@ -9,6 +9,7 @@ export interface TrackerStatus {
   stress?: Assessment
   reaction?: Assessment
   exercise?: Assessment
+  cognition?: Assessment
 }
 
 export function trackerAssessment(tracker: Tracker, s: TrackerStatus): Assessment | undefined {
@@ -23,6 +24,8 @@ export function trackerAssessment(tracker: Tracker, s: TrackerStatus): Assessmen
       return s.reaction
     case 'exercise':
       return s.exercise
+    case 'cognition':
+      return s.cognition
     case 'link':
       return undefined
   }

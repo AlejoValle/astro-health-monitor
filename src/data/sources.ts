@@ -85,6 +85,13 @@ export const SOURCES: Source[] = [
     kind: 'nasa',
   },
   {
+    id: 'nasa-veggie',
+    org: 'NASA',
+    title: 'Growing Plants in Space (Veggie on the International Space Station)',
+    url: 'https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/',
+    kind: 'nasa',
+  },
+  {
     id: 'csa-radiation',
     org: 'Canadian Space Agency',
     title: 'Monitoring radiation for astronaut health',

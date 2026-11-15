@@ -9,7 +9,9 @@ import {
   type RoutineTask,
   type Slot,
   type TaskTarget,
+  isCoreDaily,
 } from '../data/routine'
+import type { CheckKind } from './db'
 import { INDICATORS, type IndicatorId } from '../data/indicators'
 
 export const DAY_MS = 24 * 60 * 60 * 1000
@@ -17,7 +19,7 @@ export const DAY_MS = 24 * 60 * 60 * 1000
 /** The records the routine is credited from. */
 export interface RoutineRecords {
   readings: { indicatorId: IndicatorId; at: number; values: number[] }[]
-  checks: { kind: 'stress' | 'reaction'; at: number }[]
+  checks: { kind: CheckKind; at: number }[]
   workouts: { at: number }[]
   doses: { at: number }[]
 }
@@ -35,8 +37,10 @@ function timesFor(target: TaskTarget, r: RoutineRecords): number[] {
   switch (target.kind) {
     case 'reading':
       return r.readings.filter((x) => x.indicatorId === target.indicator).map((x) => x.at)
-    case 'check':
-      return r.checks.filter((x) => x.kind === target.check).map((x) => x.at)
+    case 'check': {
+      const kinds = Array.isArray(target.check) ? target.check : [target.check]
+      return r.checks.filter((x) => kinds.includes(x.kind)).map((x) => x.at)
+    }
     case 'workout':
       return r.workouts.map((x) => x.at)
     case 'dose':
@@ -120,14 +124,14 @@ export interface Progress {
 
 export function progress(r: RoutineRecords, now: number, tasks = ROUTINE): Progress {
   const today = startOfDay(now)
-  const daily = tasks.filter((t) => t.everyDays === 1)
+  const daily = tasks.filter(isCoreDaily)
 
   let xp = 0
   const doneCount = new Map<number, number>()
   for (const task of tasks) {
     const days = creditedDays(task, r).filter((d) => d <= today)
     xp += days.length * task.xp
-    if (task.everyDays === 1) for (const d of days) doneCount.set(d, (doneCount.get(d) ?? 0) + 1)
+    if (isCoreDaily(task)) for (const d of days) doneCount.set(d, (doneCount.get(d) ?? 0) + 1)
   }
   const fullDays = new Set([...doneCount].filter(([, n]) => n >= daily.length * FULL_DAY_SHARE).map(([d]) => d))
   xp += fullDays.size * FULL_DAY_BONUS

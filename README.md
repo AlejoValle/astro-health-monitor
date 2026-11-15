@@ -16,7 +16,7 @@ Tether is a web app designed for a phone worn on the wrist. A crew member measur
 | Home | Sees an overall status, the latest value of six indicators (heart rate, blood pressure, glucose, temperature, sleep and mood), the mission radiation dose and the five hazards at a glance |
 | Hazards | Sees NASA's five hazards of spaceflight, how much each weighs at the current location, its status from the crew member's own data, and the tools that track it |
 | Radiation | Logs the active dosimeter, sees the mission and career dose against NASA's 600 mSv limit, the expected dose rate at the location, and a solar storm protocol |
-| Routine | Follows a morning, midday and evening routine that ticks itself off when a real measurement is logged, and earns points, rank, a streak and mission patches |
+| Routine | Follows a morning, midday and evening routine that ticks itself off when a real measurement is logged, and earns points, rank, a streak and mission patches. Full days also grow a lettuce in a space garden, move a ship from Earth to the Moon, Mars and Jupiter, and count toward goals the whole crew reaches together |
 | Alerts | Sees early warnings found in their own history: streaks out of range, worsening trends, values heading out of range within a week, and combined patterns such as accumulated fatigue, sleep debt, early infection signs and exercise below target |
 | Report | Writes a note and copies, shares or downloads a plain-text report for the flight surgeon with vitals, warnings, radiation, exercise and mind checks, always in English for the ground team |
 | Body map | Taps a body system (brain, eyes, heart, immune, gut, bones, muscles) to see what it does, what space does to it, its status from the crew member's data, and filters by hazard |
@@ -25,6 +25,7 @@ Tether is a web app designed for a phone worn on the wrist. A crew member measur
 | Measure | Reads heart rate from a Bluetooth sensor, or types any reading by hand, with instructions on how to take it |
 | Symptoms | Taps the part of the body that feels wrong and answers yes/no questions to get a likely explanation, self-care steps and an escalation level |
 | Mind | Rates mood, answers a four-question stress check and takes a reaction test |
+| Games | Plays Memory 2-Back and Symbol speed, short brain games modelled on NASA's Cognition tests and compared with their own baseline, and answers a daily space health quiz with a cited explanation |
 | Exercise | Follows a daily plan that changes with the mission location, and logs the minutes done |
 | Sounds | Plays one of six ambient sounds with a sleep timer |
 | Trends | Sees each indicator over time against its OK range |
@@ -62,6 +63,8 @@ The mission location is chosen in the header: Earth orbit, deep space transit, l
 - [5 Hazards of Human Spaceflight](https://www.nasa.gov/hrp/hazards/) and [Risks of Human Spaceflight](https://www.nasa.gov/hrp/risks/), NASA Human Research Program: mission locations and the structure of the symptom tree.
 - [Reaction Self-Test on the ISS](https://humanresearchroadmap.nasa.gov/Tasks/?i=1651): basis of the reaction test (3 minutes, taps slower than 355 ms count as lapses).
 - [Space Adaptation Sickness](https://www.nasa.gov/wp-content/uploads/2025/09/ochmo-mtb-004-space-adaptation-sickness-sas.pdf), [Spaceflight Experience and Medical Care](https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf) and [Spaceflight Associated Neuro-ocular Syndrome](https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/): space-specific branches of the symptom tree.
+- [Cognition test battery](https://humanresearchroadmap.nasa.gov/): the idea behind the brain games (working memory with 2-Back, processing speed with symbol-digit). A drop of 15% from the crew member's own median is a watch, 30% is an action.
+- [Growing Plants in Space (Veggie)](https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/): the space garden that grows with the routine.
 - [Hazard pages for each of the five hazards](https://www.nasa.gov/hrp/hazards/): the Hazards screen, one card per hazard.
 - [Moon 2 Mars Space Radiation Protection](https://ntrs.nasa.gov/citations/20250006168), NASA Technical Reports Server: expected dose rate at each location and solar condition, and expected dose from a large solar storm.
 - [NASA-STD-3001 Technical Brief: Design for Ionizing Radiation Protection](https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-020-radiation-protection.pdf): 600 mSv career limit, 250 mSv solar storm limit and the storm shelter steps.

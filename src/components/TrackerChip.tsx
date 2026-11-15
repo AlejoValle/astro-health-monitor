@@ -21,6 +21,8 @@ function trackerTarget(t: Tracker): { to: string; label: string } {
       return { to: '/mind?v=reaction', label: msg('Reaction test') }
     case 'exercise':
       return { to: '/exercise', label: msg('Exercise') }
+    case 'cognition':
+      return { to: '/games', label: msg('Brain games') }
     case 'link':
       return { to: t.to, label: t.label }
   }

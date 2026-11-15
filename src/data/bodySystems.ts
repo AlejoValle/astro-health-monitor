@@ -32,7 +32,7 @@ export const BODY_SYSTEMS: BodySystem[] = [
     space: 'Isolation, broken sleep and radiation can slow thinking and lower mood.',
     watch: 'Slower reactions, low mood, trouble focusing.',
     hazards: ['isolation', 'radiation'],
-    trackers: [{ kind: 'reaction' }, { kind: 'indicator', id: 'mood' }, { kind: 'indicator', id: 'sleep' }, { kind: 'stress' }],
+    trackers: [{ kind: 'reaction' }, { kind: 'cognition' }, { kind: 'indicator', id: 'mood' }, { kind: 'indicator', id: 'sleep' }, { kind: 'stress' }],
     area: 'head',
     spot: { x: 100, y: 30 },
     sourceIds: ['hrp-isolation', 'hrp-radiation'],

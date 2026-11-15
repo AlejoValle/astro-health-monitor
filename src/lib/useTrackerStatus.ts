@@ -28,6 +28,7 @@ export function useTrackerStatus(): TrackerStatus | undefined {
     radiation: radiation.overall,
     stress: mind.stress,
     reaction: mind.reaction,
+    cognition: mind.cognition,
     exercise: exercise ? assessExercise(exercise.share) : undefined,
   }
 }

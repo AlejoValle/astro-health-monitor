@@ -12,14 +12,19 @@ export interface Reading {
 }
 
 /** A mind check result. `score` is the stress total (0 to 16) or the median reaction time in ms. */
+/** Mind checks and games: stress check, reaction test, 2-back memory, symbol-digit speed, daily quiz. */
+export type CheckKind = 'stress' | 'reaction' | 'nback' | 'dsst' | 'quiz'
+
 export interface MindCheck {
   id: number
-  kind: 'stress' | 'reaction'
+  kind: CheckKind
   at: number
   score: number
   lapses?: number
   falseStarts?: number
   responses?: number
+  /** Which quiz question was answered. */
+  item?: number
   origin?: 'simulated'
 }
 
