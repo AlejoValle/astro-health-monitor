@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
+import { ChevronLeft, ChevronRight, PersonStanding, RotateCcw } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -71,7 +71,7 @@ function AreaPicker({ onPick }: { onPick: (id: Area['id']) => void }) {
       <p className="label">{t('Symptoms')}</p>
       <h1 className="mt-1 text-3xl font-semibold tracking-tight">{t('Where does it bother you?')}</h1>
       <div className="mt-5 flex gap-4">
-        <div className="w-28 shrink-0 self-center sm:w-36">
+        <div className="w-32 shrink-0 self-center sm:w-44">
           <BodyFigure onPick={onPick} />
         </div>
         <ul className="flex-1 space-y-2">
@@ -97,6 +97,17 @@ function AreaPicker({ onPick }: { onPick: (id: Area['id']) => void }) {
           'Answer a few yes or no questions. You get a likely explanation and what to do. It is guidance, not a medical diagnosis.',
         )}
       </p>
+      <Link
+        to="/body"
+        className="panel mt-4 flex min-h-16 items-center gap-3 rounded-2xl px-4 active:bg-panel-2"
+      >
+        <PersonStanding size={22} className="shrink-0 text-accent" aria-hidden />
+        <span className="flex-1">
+          <span className="block font-medium">{t('Body map')}</span>
+          <span className="block text-xs text-ink-dim">{t('See how each body system is doing and what space does to it.')}</span>
+        </span>
+        <ChevronRight size={18} className="shrink-0 text-ink-faint" aria-hidden />
+      </Link>
     </div>
   )
 }
