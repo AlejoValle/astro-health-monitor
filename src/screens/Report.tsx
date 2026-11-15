@@ -20,6 +20,7 @@ import { useNow, useRecords } from '../lib/useRecords'
 import { useRoutine } from '../lib/useRoutine'
 import { profileKey } from '../lib/profiles'
 import { isCoreDaily } from '../data/routine'
+import { ReportQr } from '../components/ReportQr'
 
 const NOTE_KEY = profileKey('astrovitals-report-note')
 
@@ -174,6 +175,8 @@ export function Report() {
           label={done === 'download' ? t('Saved') : t('Download')}
         />
       </div>
+
+      <ReportQr text={text} />
 
       <section className="panel rounded-3xl p-5">
         <h2 className="label flex items-center gap-2">

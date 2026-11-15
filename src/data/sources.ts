@@ -106,6 +106,20 @@ export const SOURCES: Source[] = [
     kind: 'nasa',
   },
   {
+    id: 'nasa-twins',
+    org: 'NASA',
+    title: "NASA's Twins Study Results Published in Science",
+    url: 'https://www.nasa.gov/feature/nasa-s-twins-study-results-published-in-science',
+    kind: 'nasa',
+  },
+  {
+    id: 'nasa-pharma',
+    org: 'NASA Johnson Space Center (Du et al., The AAPS Journal, 2011)',
+    title: 'Evaluation of Physical and Chemical Changes in Pharmaceuticals Flown on Space Missions',
+    url: 'https://link.springer.com/article/10.1208/s12248-011-9270-0',
+    kind: 'nasa',
+  },
+  {
     id: 'csa-radiation',
     org: 'Canadian Space Agency',
     title: 'Monitoring radiation for astronaut health',

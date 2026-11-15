@@ -9,6 +9,10 @@ import { Control } from './screens/Control'
 import { CheckIn } from './screens/CheckIn'
 import { Timeline } from './screens/Timeline'
 import { Earth } from './screens/Earth'
+import { Messages } from './screens/Messages'
+import { Nutrition } from './screens/Nutrition'
+import { RealCrews } from './screens/RealCrews'
+import { Medkit } from './screens/Medkit'
 import { Scenarios } from './screens/Scenarios'
 import { DeviceStage, DeviceSwitcher } from './components/DevicePreview'
 import { IntroSplash } from './components/IntroSplash'
@@ -62,6 +66,10 @@ export default function App() {
                 <Route path="checkin" element={<CheckIn />} />
                 <Route path="timeline" element={<Timeline />} />
                 <Route path="earth" element={<Earth />} />
+                <Route path="messages" element={<Messages />} />
+                <Route path="nutrition" element={<Nutrition />} />
+                <Route path="real-crews" element={<RealCrews />} />
+                <Route path="medkit" element={<Medkit />} />
                 <Route path="scenarios" element={<Scenarios />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>

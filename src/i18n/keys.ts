@@ -14,6 +14,7 @@ import { BODY_SYSTEMS } from '../data/bodySystems'
 import { SCENARIOS } from '../data/scenarios'
 import { TRIVIA } from '../data/trivia'
 import { TIMELINE } from '../data/timeline'
+import { REAL_CASES } from '../data/realCrews'
 import { MISSION_PLANS, STORM_ACTION, STORM_SCALE } from '../data/missionPlans'
 import { EARTH_USES } from '../data/earthUses'
 
@@ -43,7 +44,7 @@ export function sourceKeys(srcDir: string): Set<string> {
 const TEXT_KEYS = new Set([
   'label', 'hint', 'text', 'help', 'title', 'meaning', 'steps', 'name', 'short', 'why',
   'howTo', 'note', 'body', 'goal', 'gravity', 'contactLabel', 'does', 'space', 'watch', 'story', 'reactions', 'question', 'options', 'explain',
-  'when', 'toLabel', 'crew', 'uses', 'who',
+  'when', 'toLabel', 'crew', 'uses', 'who', 'mission', 'linkLabel', 'findings',
 ])
 
 function collect(value: unknown, out: Set<string>, textKey = false) {
@@ -59,7 +60,7 @@ function collect(value: unknown, out: Set<string>, textKey = false) {
 /** Text fields of the data files, which screens pass through t() when they show them. */
 export function dataKeys(): Set<string> {
   const out = new Set<string>()
-  for (const data of [TIMELINE, MISSION_PLANS, STORM_SCALE, EARTH_USES, TRIVIA, SCENARIOS, BODY_SYSTEMS, AREAS, NODES, INDICATORS, LOCATIONS, EXERCISE_PLANS, SOUNDS, HAZARDS, ROUTINE, PATCHES, RANKS, SOLAR_LABEL]) {
+  for (const data of [REAL_CASES, TIMELINE, MISSION_PLANS, STORM_SCALE, EARTH_USES, TRIVIA, SCENARIOS, BODY_SYSTEMS, AREAS, NODES, INDICATORS, LOCATIONS, EXERCISE_PLANS, SOUNDS, HAZARDS, ROUTINE, PATCHES, RANKS, SOLAR_LABEL]) {
     collect(data, out)
   }
   for (const list of [STRESS_QUESTIONS, STRESS_OPTIONS, STORM_STEPS, Object.values(SLOT_LABEL), Object.values(SHIELDING), Object.values(STORM_DOSE), Object.values(STORM_ACTION)]) {

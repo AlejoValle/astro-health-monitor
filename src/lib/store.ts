@@ -23,7 +23,12 @@ interface Settings extends Mission {
   /** Interface language. English unless the crew member picks another. */
   language: Lang
   setLanguage: (lang: Lang) => void
+  /** Dim red display for the sleep period: automatic at night, always on, or off. */
+  nightMode: NightMode
+  setNightMode: (mode: NightMode) => void
 }
+
+export type NightMode = 'auto' | 'on' | 'off'
 
 export const useSettings = create<Settings>()(
   persist(
@@ -38,6 +43,8 @@ export const useSettings = create<Settings>()(
       setReminders: (reminders) => set({ reminders }),
       language: 'en',
       setLanguage: (language) => set({ language }),
+      nightMode: 'auto',
+      setNightMode: (nightMode) => set({ nightMode }),
     }),
     // Each crew profile keeps its own settings: language, location and mission.
     { name: settingsKeyFor(getActiveProfileId()) },

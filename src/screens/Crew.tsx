@@ -2,6 +2,7 @@ import { Check, FlaskConical, Pencil, Plus, Trash2, Users } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Avatar } from '../components/Avatar'
+import { BackupCard } from '../components/BackupCard'
 import { useT } from '../i18n'
 import { deleteProfileData } from '../lib/db'
 import {
@@ -136,6 +137,8 @@ export function Crew() {
           <Plus size={18} aria-hidden /> {t('Add crew member')}
         </button>
       )}
+
+      <BackupCard />
 
       <Link to="/scenarios" className="panel flex min-h-16 items-center gap-3 rounded-2xl px-4 active:bg-panel-2">
         <Users size={22} className="shrink-0 text-accent" aria-hidden />

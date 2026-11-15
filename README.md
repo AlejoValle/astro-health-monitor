@@ -18,12 +18,16 @@ Tether is a web app designed for a phone worn on the wrist. A crew member measur
 | Radiation | Logs the active dosimeter, sees the mission and career dose against NASA's 600 mSv limit, the expected dose rate at the location, a solar storm protocol, a storm simulator for NOAA levels S1 to S5 with a shelter drill, and a planner that charts the career dose of a station, lunar or Mars mission |
 | Routine | Follows a morning, midday and evening routine that ticks itself off when a real measurement is logged, and earns points, rank, a streak and mission patches. Full days also grow a lettuce in a space garden, move a ship from Earth to the Moon, Mars and Jupiter, and count toward goals the whole crew reaches together |
 | Alerts | Sees early warnings found in their own history: streaks out of range, worsening trends, values heading out of range within a week, and combined patterns such as accumulated fatigue, sleep debt, early infection signs and exercise below target |
-| Report | Writes a note and copies, shares or downloads a plain-text report for the flight surgeon with vitals, warnings, radiation, exercise and mind checks, always in English for the ground team |
+| Report | Writes a note and copies, shares, downloads or shows as a QR code a plain-text report for the flight surgeon with vitals, warnings, radiation, exercise and mind checks, always in English for the ground team |
 | Body map | Taps a body system (brain, eyes, heart, immune, gut, bones, muscles) to see what it does, what space does to it, its status from the crew member's data, and filters by hazard |
 | Daily check-in | Logs sleep, mood and every vital on one screen in about a minute. Last values are filled in, but only the checks ticked as measured today are saved |
 | Mission control | Sees every crew member on the device at a glance, most urgent first: status, vitals, top warnings, career dose, routine today and when they last logged |
 | Mission timeline | Sees what the body goes through over a mission (motion sickness, fluid shift, bone loss, eye changes, isolation, readapting to gravity) with today's mission day marked and a source for each step |
 | Tether on Earth | Sees where the same ideas help on Earth: polar stations, submarines, offshore platforms, remote rural areas, expeditions and self-care at home |
+| Messages | Writes to the flight surgeon and watches the message travel with the real signal delay for the location (none in orbit, 1.3 s from the Moon, up to 20 minutes from Mars), with the earliest possible reply |
+| Nutrition | Logs water with one tap, how much of each planned meal was eaten and body mass once a week, with warnings for eating less than planned and losing mass |
+| Medical kit | Keeps count of the shared medical kit, flags items that run low or expire within 60 days, and logs each use |
+| Real crews | Reads what NASA published about real crews (Twins Study, Apollo, station crews, Curiosity's radiation data), each linked to the part of Tether that watches for it |
 | Crew | Adds, edits, switches and removes crew profiles on a shared device; each has its own readings, routine, dose and settings |
 | Use cases | Opens demo crew members with 14 days of simulated data (healthy, early infection, isolation and low mood, sleep deprivation, rising blood pressure, solar storm exposure, skipping exercise, and a historical case rebuilt from Apollo 15) to see how Tether reacts |
 | Measure | Reads heart rate from a Bluetooth sensor, or types any reading by hand, with instructions on how to take it |
@@ -34,6 +38,8 @@ Tether is a web app designed for a phone worn on the wrist. A crew member measur
 | Sounds | Plays one of six ambient sounds with a sleep timer |
 | Trends | Sees each indicator over time against its OK range |
 | Sources | Reads the full list of references and which parts are the app's own design choices |
+
+A welcome guide explains the app the first time each crew member opens it. A red night mode dims the whole screen from 22:00 to 06:00 (or always, or never) to protect sleep. Each crew member can save a backup file of their data and restore it on another device with no network.
 
 The mission location is chosen in the header: Earth orbit, deep space transit, lunar surface or Mars surface. It changes the exercise plan and the wording about who to contact, because a crew in transit or on Mars cannot count on a real-time answer from the ground.
 
@@ -71,6 +77,9 @@ The mission location is chosen in the header: Earth orbit, deep space transit, l
 - [Growing Plants in Space (Veggie)](https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/): the space garden that grows with the routine.
 - [NOAA Space Weather Scales](https://www.swpc.noaa.gov/noaa-scales-explanation), NOAA SWPC: proton flux, frequency and astronaut guidance for each solar radiation storm level in the simulator.
 - [Inflight Medical Problems in Apollo Crews](https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_18-45_Inflight_Medical_Problems.htm), from Biomedical Results of Apollo (SP-368): the irregular heartbeats behind the Apollo 15 case. Its numbers are a reconstruction, labelled as such.
+- [NASA's Twins Study results](https://www.nasa.gov/feature/nasa-s-twins-study-results-published-in-science): body mass, calories, cognition, carotid and gene expression findings on the Real crews and Nutrition screens.
+- [Pharmaceuticals flown on space missions](https://link.springer.com/article/10.1208/s12248-011-9270-0), NASA Johnson Space Center (Du et al., 2011): why the medical kit watches expiry dates closely.
+- [Hazard: Distance from Earth](https://www.nasa.gov/hrp/hazard-distance-from-earth/): the up to 20 minutes one-way delay used for messages from Mars.
 - [Hazard pages for each of the five hazards](https://www.nasa.gov/hrp/hazards/): the Hazards screen, one card per hazard.
 - [Moon 2 Mars Space Radiation Protection](https://ntrs.nasa.gov/citations/20250006168), NASA Technical Reports Server: expected dose rate at each location and solar condition, and expected dose from a large solar storm.
 - [NASA-STD-3001 Technical Brief: Design for Ionizing Radiation Protection](https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-020-radiation-protection.pdf): 600 mSv career limit, 250 mSv solar storm limit and the storm shelter steps.

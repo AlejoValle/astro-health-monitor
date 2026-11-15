@@ -1,4 +1,6 @@
-import { ChevronRight, Languages } from 'lucide-react'
+import { ChevronRight, Languages, Moon, Sun } from 'lucide-react'
+import { msg } from '../i18n/msg'
+import { NEXT_MODE } from '../lib/night'
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { locationById } from '../data/locations'
@@ -14,6 +16,14 @@ import { MasterCaution } from './MasterCaution'
 import { LOCATION_ICON, LocationSheet } from './LocationSheet'
 import { ProgressToast } from './ProgressToast'
 import { SpaceBackdrop } from './SpaceBackdrop'
+import { WelcomeGuide } from './WelcomeGuide'
+import { NightFilter } from './NightFilter'
+
+const NIGHT_LABEL = {
+  auto: msg('Red night mode: automatic from 22:00 to 06:00. Tap for always on.'),
+  on: msg('Red night mode: on. Tap to turn it off.'),
+  off: msg('Red night mode: off. Tap for automatic.'),
+} as const
 
 export function AppShell() {
   const locationId = useSettings((s) => s.locationId)
@@ -22,6 +32,8 @@ export function AppShell() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [languageOpen, setLanguageOpen] = useState(false)
   const language = useSettings((s) => s.language)
+  const nightMode = useSettings((s) => s.nightMode)
+  const setNightMode = useSettings((s) => s.setNightMode)
   const t = useT()
   const profiles = useProfiles()
   const profile = profiles.find((p) => p.id === getActiveProfileId()) ?? profiles[0]
@@ -55,6 +67,20 @@ export function AppShell() {
           <div className="flex items-center gap-2">
             <button
               type="button"
+              onClick={() => setNightMode(NEXT_MODE[nightMode])}
+              aria-label={t(NIGHT_LABEL[nightMode])}
+              title={t(NIGHT_LABEL[nightMode])}
+              className="glass press relative flex size-12 shrink-0 items-center justify-center rounded-full"
+            >
+              {nightMode === 'off' ? (
+                <Sun size={18} strokeWidth={1.75} className="text-accent" aria-hidden />
+              ) : (
+                <Moon size={18} strokeWidth={1.75} className="text-accent" aria-hidden />
+              )}
+              {nightMode === 'auto' && <span className="absolute bottom-1.5 text-[8px] font-semibold uppercase text-ink-dim">{t('auto')}</span>}
+            </button>
+            <button
+              type="button"
               onClick={() => setLanguageOpen(true)}
               aria-label={t('Language')}
               title={t('Language')}
@@ -86,6 +112,8 @@ export function AppShell() {
 
         <BottomNav />
         <ProgressToast />
+        <WelcomeGuide />
+        <NightFilter />
         <LocationSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />
         <LanguageSheet open={languageOpen} onClose={() => setLanguageOpen(false)} />
       </div>

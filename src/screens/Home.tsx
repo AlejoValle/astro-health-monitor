@@ -1,4 +1,5 @@
-import { AudioLines, BellRing, BookOpen, ChartLine, ChevronRight, FileText, FlaskConical, PersonStanding, Users, Gamepad2, ClipboardCheck, MonitorDot, CalendarRange, Earth } from 'lucide-react'
+import { AudioLines, BellRing, BookOpen, ChartLine, ChevronRight, FileText, FlaskConical, PersonStanding, Users, Gamepad2, ClipboardCheck, MonitorDot, CalendarRange, Earth, Radio, Utensils, Pill, Microscope, CircleHelp } from 'lucide-react'
+import { openGuide } from '../lib/guide'
 import { useT } from '../i18n'
 import { msg } from '../i18n/msg'
 import { Link } from 'react-router-dom'
@@ -33,6 +34,10 @@ const QUICK_LINKS = [
   { to: '/sources', label: msg('Sources'), icon: BookOpen },
   { to: '/games', label: msg('Games'), icon: Gamepad2 },
   { to: '/control', label: msg('Mission control'), icon: MonitorDot },
+  { to: '/messages', label: msg('Messages'), icon: Radio },
+  { to: '/nutrition', label: msg('Nutrition'), icon: Utensils },
+  { to: '/medkit', label: msg('Medical kit'), icon: Pill },
+  { to: '/real-crews', label: msg('Real crews'), icon: Microscope },
   { to: '/timeline', label: msg('Timeline'), icon: CalendarRange },
   { to: '/earth', label: msg('On Earth'), icon: Earth },
   { to: '/crew', label: msg('Crew'), icon: Users },
@@ -182,6 +187,9 @@ export function Home() {
         <HazardSummary />
 
         <section className="text-center">
+          <button type="button" onClick={openGuide} className="inline-flex min-h-12 items-center gap-1.5 px-4 text-sm text-ink-dim underline underline-offset-4">
+            <CircleHelp size={14} aria-hidden /> {t('How Tether works')}
+          </button>
           {simulated ? (
             <button
               type="button"

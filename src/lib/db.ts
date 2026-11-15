@@ -45,11 +45,33 @@ export interface Dose {
   origin: 'manual' | 'simulated'
 }
 
+/** Water, meals and body mass. */
+export interface Intake {
+  id: number
+  at: number
+  kind: 'water' | 'meal' | 'mass'
+  /** mL of water, share of the planned meal eaten (0 to 1), or body mass in kg. */
+  amount: number
+  origin?: 'simulated'
+}
+
+/** A message to the ground team, held in the outbox while the signal travels. */
+export interface Message {
+  id: number
+  at: number
+  text: string
+  /** One-way signal delay when it was sent, in ms. */
+  delayMs: number
+  withReport: boolean
+}
+
 export type TetherDb = Dexie & {
   readings: EntityTable<Reading, 'id'>
   checks: EntityTable<MindCheck, 'id'>
   workouts: EntityTable<Workout, 'id'>
   doses: EntityTable<Dose, 'id'>
+  intake: EntityTable<Intake, 'id'>
+  messages: EntityTable<Message, 'id'>
 }
 
 /** Opens one crew member's database. Every profile has the same schema. */
@@ -66,6 +88,10 @@ export function openDb(name: string): TetherDb {
   })
   d.version(4).stores({
     doses: '++id, at, origin',
+  })
+  d.version(5).stores({
+    intake: '++id, at, [kind+at]',
+    messages: '++id, at',
   })
   return d
 }
@@ -92,4 +118,12 @@ export function addCheck(check: Omit<MindCheck, 'id' | 'at'>) {
 
 export function addWorkout(workout: Omit<Workout, 'id' | 'at'>) {
   return db.workouts.add({ ...workout, at: Date.now() })
+}
+
+export function addIntake(kind: Intake['kind'], amount: number) {
+  return db.intake.add({ kind, amount, at: Date.now() })
+}
+
+export function addMessage(text: string, delayMs: number, withReport: boolean) {
+  return db.messages.add({ text, delayMs, withReport, at: Date.now() })
 }
