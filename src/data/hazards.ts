@@ -10,6 +10,7 @@ export type Tracker =
   | { kind: 'radiation' }
   | { kind: 'stress' }
   | { kind: 'reaction' }
+  | { kind: 'exercise' }
   | { kind: 'link'; to: string; label: string }
 
 /** How strongly the hazard weighs at a location: 1 lower, 2 moderate, 3 higher. App's own synthesis. */
@@ -93,7 +94,7 @@ export const HAZARDS: Hazard[] = [
     trackers: [
       { kind: 'indicator', id: 'hr' },
       { kind: 'indicator', id: 'bp' },
-      { kind: 'link', to: '/exercise', label: 'Exercise plan' },
+      { kind: 'exercise' },
       { kind: 'link', to: '/symptoms', label: 'Vision changes' },
     ],
     sourceIds: ['hrp-gravity', 'nasa-bone-muscle', 'nasa-sans'],

@@ -1,7 +1,8 @@
-import { AudioLines, BookOpen, ChartLine, FlaskConical } from 'lucide-react'
+import { AudioLines, BellRing, BookOpen, ChartLine, ChevronRight, FileText, FlaskConical, PersonStanding } from 'lucide-react'
 import { useT } from '../i18n'
 import { msg } from '../i18n/msg'
 import { Link } from 'react-router-dom'
+import { AlertCard } from '../components/AlertCard'
 import { ContactBanner } from '../components/ContactBanner'
 import { HazardSummary } from '../components/HazardSummary'
 import { IndicatorCard } from '../components/IndicatorCard'
@@ -12,6 +13,7 @@ import { assess, worst, type Status } from '../lib/rules'
 import { clearSimulatedMission, loadSimulatedMission } from '../lib/seed'
 import { useSoundPlayer } from '../lib/soundPlayer'
 import { STATUS_STYLE } from '../lib/statusStyle'
+import { useAlerts } from '../lib/useAlerts'
 import { useLatest } from '../lib/useLatest'
 import { useRadiation } from '../lib/useRadiation'
 
@@ -22,6 +24,9 @@ const HEADLINE: Record<Status, string> = {
 }
 
 const QUICK_LINKS = [
+  { to: '/body', label: msg('Body map'), icon: PersonStanding },
+  { to: '/alerts', label: msg('Alerts'), icon: BellRing },
+  { to: '/report', label: msg('Report'), icon: FileText },
   { to: '/trends', label: msg('Trends'), icon: ChartLine },
   { to: '/sounds', label: msg('Sounds'), icon: AudioLines },
   { to: '/sources', label: msg('Sources'), icon: BookOpen },
@@ -30,6 +35,7 @@ const QUICK_LINKS = [
 export function Home() {
   const latest = useLatest()
   const radiation = useRadiation()
+  const alerts = useAlerts()
   const soundPlaying = useSoundPlayer((s) => s.playing !== null)
   const t = useT()
 
@@ -109,9 +115,14 @@ export function Home() {
 
         <section className="reveal-list grid grid-cols-3 gap-3">
           {QUICK_LINKS.map(({ to, label, icon: Icon }) => (
-            <Link key={to} to={to} className="panel flex min-h-20 flex-col items-center justify-center gap-2 rounded-2xl">
+            <Link key={to} to={to} className="panel relative flex min-h-20 flex-col items-center justify-center gap-2 rounded-2xl">
               <Icon size={22} strokeWidth={1.75} className="text-accent" aria-hidden />
               <span className="text-sm font-medium">{to === '/sounds' && soundPlaying ? t('Playing') : t(label)}</span>
+              {to === '/alerts' && alerts && alerts.length > 0 && (
+                <span className="absolute right-2 top-2 flex min-w-5 items-center justify-center rounded-full bg-alert px-1.5 text-[11px] font-semibold text-space">
+                  {alerts.length}
+                </span>
+              )}
             </Link>
           ))}
         </section>
@@ -134,6 +145,22 @@ export function Home() {
             ))}
           </div>
         </section>
+
+        {alerts && alerts.length > 0 && (
+          <section>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="label">{t('Early warnings')}</h2>
+              <Link to="/alerts" className="flex min-h-10 items-center gap-1 text-sm text-ink-dim">
+                {t('See all ({n})', { n: alerts.length })} <ChevronRight size={14} aria-hidden />
+              </Link>
+            </div>
+            <div className="reveal-list grid gap-3 md:grid-cols-2">
+              {alerts.slice(0, 2).map((a) => (
+                <AlertCard key={a.id} alert={a} compact />
+              ))}
+            </div>
+          </section>
+        )}
 
         <HazardSummary />
 

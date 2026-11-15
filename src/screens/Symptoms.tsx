@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { BodyFigure } from '../components/BodyFigure'
 import { ContactBanner } from '../components/ContactBanner'
 import { INDICATOR_ICON } from '../components/IndicatorCard'
@@ -14,7 +14,9 @@ import { STATUS_STYLE } from '../lib/statusStyle'
 import { walk, type Answer } from '../lib/triage'
 
 export function Symptoms() {
-  const [area, setArea] = useState<Area | null>(null)
+  const [params] = useSearchParams()
+  // ?a=chest opens that area directly, for links from the body map.
+  const [area, setArea] = useState<Area | null>(() => AREAS.find((x) => x.id === params.get('a')) ?? null)
   const [answers, setAnswers] = useState<Answer[]>([])
   const t = useT()
 

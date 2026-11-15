@@ -10,6 +10,7 @@ import { PATCHES, RANKS, ROUTINE, SLOT_LABEL } from '../data/routine'
 import { SOUNDS } from '../data/sounds'
 import { STRESS_OPTIONS, STRESS_QUESTIONS } from '../data/stressCheck'
 import { AREAS, NODES } from '../data/symptomTree'
+import { BODY_SYSTEMS } from '../data/bodySystems'
 
 // Test-only helper: every English string the app shows, so each language can be checked for gaps.
 
@@ -36,7 +37,7 @@ export function sourceKeys(srcDir: string): Set<string> {
 
 const TEXT_KEYS = new Set([
   'label', 'hint', 'text', 'help', 'title', 'meaning', 'steps', 'name', 'short', 'why',
-  'howTo', 'note', 'body', 'goal', 'gravity', 'contactLabel',
+  'howTo', 'note', 'body', 'goal', 'gravity', 'contactLabel', 'does', 'space', 'watch',
 ])
 
 function collect(value: unknown, out: Set<string>, textKey = false) {
@@ -52,7 +53,7 @@ function collect(value: unknown, out: Set<string>, textKey = false) {
 /** Text fields of the data files, which screens pass through t() when they show them. */
 export function dataKeys(): Set<string> {
   const out = new Set<string>()
-  for (const data of [AREAS, NODES, INDICATORS, LOCATIONS, EXERCISE_PLANS, SOUNDS, HAZARDS, ROUTINE, PATCHES, RANKS, SOLAR_LABEL]) {
+  for (const data of [BODY_SYSTEMS, AREAS, NODES, INDICATORS, LOCATIONS, EXERCISE_PLANS, SOUNDS, HAZARDS, ROUTINE, PATCHES, RANKS, SOLAR_LABEL]) {
     collect(data, out)
   }
   for (const list of [STRESS_QUESTIONS, STRESS_OPTIONS, STORM_STEPS, Object.values(SLOT_LABEL), Object.values(SHIELDING), Object.values(STORM_DOSE)]) {

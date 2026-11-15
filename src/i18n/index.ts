@@ -48,3 +48,8 @@ export function useT() {
 export function useLocale() {
   return localeOf(useSettings((s) => s.language))
 }
+
+/** Translates the string values of `vars` too: they are English keys, such as an indicator name. */
+export function translateVars(t: (text: string, vars?: Vars) => string, vars: Vars): Vars {
+  return Object.fromEntries(Object.entries(vars).map(([k, v]) => [k, typeof v === 'string' ? t(v) : v]))
+}

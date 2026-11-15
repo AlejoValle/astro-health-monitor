@@ -1,6 +1,8 @@
 import { MotionConfig } from 'motion/react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
+import { Alerts } from './screens/Alerts'
+import { BodyMap } from './screens/BodyMap'
 import { DeviceStage, DeviceSwitcher } from './components/DevicePreview'
 import { IntroSplash } from './components/IntroSplash'
 import { useDesktopWeb, usePreview } from './lib/devicePreview'
@@ -11,6 +13,7 @@ import { Home } from './screens/Home'
 import { Measure } from './screens/Measure'
 import { Mind } from './screens/Mind'
 import { Radiation } from './screens/Radiation'
+import { Report } from './screens/Report'
 import { Routine } from './screens/Routine'
 import { Sounds } from './screens/Sounds'
 import { Sources } from './screens/Sources'
@@ -43,6 +46,9 @@ export default function App() {
                 <Route path="sources" element={<Sources />} />
                 <Route path="hazards" element={<Hazards />} />
                 <Route path="radiation" element={<Radiation />} />
+                <Route path="alerts" element={<Alerts />} />
+                <Route path="report" element={<Report />} />
+                <Route path="body" element={<BodyMap />} />
               </Route>
             </Routes>
           </HashRouter>

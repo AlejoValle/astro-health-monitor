@@ -15,6 +15,9 @@ AstroVitals is a web app designed for a phone worn on the wrist. A crew member m
 | Hazards | Sees NASA's five hazards of spaceflight, how much each weighs at the current location, its status from the crew member's own data, and the tools that track it |
 | Radiation | Logs the active dosimeter, sees the mission and career dose against NASA's 600 mSv limit, the expected dose rate at the location, and a solar storm protocol |
 | Routine | Follows a morning, midday and evening routine that ticks itself off when a real measurement is logged, and earns points, rank, a streak and mission patches |
+| Alerts | Sees early warnings found in their own history: streaks out of range, worsening trends, values heading out of range within a week, and combined patterns such as accumulated fatigue, sleep debt, early infection signs and exercise below target |
+| Report | Writes a note and copies, shares or downloads a plain-text report for the flight surgeon with vitals, warnings, radiation, exercise and mind checks, always in English for the ground team |
+| Body map | Taps a body system (brain, eyes, heart, immune, gut, bones, muscles) to see what it does, what space does to it, its status from the crew member's data, and filters by hazard |
 | Measure | Reads heart rate from a Bluetooth sensor, or types any reading by hand, with instructions on how to take it |
 | Symptoms | Taps the part of the body that feels wrong and answers yes/no questions to get a likely explanation, self-care steps and an escalation level |
 | Mind | Rates mood, answers a four-question stress check and takes a reaction test |
@@ -38,6 +41,8 @@ The mission location is chosen in the header: Earth orbit, deep space transit, l
 - **Reminders.** Home shows the next task due for the time of day. Optional browser notifications fire once per routine slot while the app is open or installed; there is no push server.
 - **Motion with restraint.** A canvas starfield with orbit rings around the current body, a short warp jump between screens, staggered entrances and numbers that count up. All of it is off when the system asks for reduced motion.
 - **Device preview.** In a desktop browser, a Web / Tablet / Phone switch shows the real app in a device frame, so judges can try the phone layout without a phone.
+- **Early warnings as rules.** `src/lib/alerts.ts` looks at the last 14 days: a streak of 3 or more days out of range, the last 3 days against the days before, a least-squares projection that would leave the OK range within 7 days, and patterns where several signals each move part of the way in the same direction. Every warning says why it fired and what to do. A test checks the simulated mission always shows a fatigue pattern.
+- **Report for the flight surgeon.** `src/lib/report.ts` builds the text; it works offline and is written in English whatever the app language, so a delayed message carries the whole picture.
 - **Six languages.** English by default, plus Spanish, Russian, Chinese (Simplified), Japanese and French: the working languages of the ISS and Tiangong crews and of the main partner agencies. Pick one from the globe button in the header. Every string goes through `t()` with the English text as its key, and `src/i18n/catalog/` holds one row per string with all six languages side by side. A test fails if any string the app shows is missing a translation or a placeholder. The translations were made with AI help and have not been reviewed by medical translators; source titles stay in their original language.
 - **Simulated demo data.** The app starts empty. "Load a simulated 14-day mission" on the Home screen fills it with simulated readings for a demo. They are labelled "Simulated data" wherever they appear.
 

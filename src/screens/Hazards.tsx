@@ -1,15 +1,13 @@
-import { ChevronRight, ExternalLink } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 import { useT } from '../i18n'
 import { msg } from '../i18n/msg'
-import { Link } from 'react-router-dom'
 import { HAZARD_ICON } from '../components/HazardSummary'
-import { INDICATOR_ICON } from '../components/IndicatorCard'
-import { StatusIcon, StatusPill } from '../components/status'
-import { HAZARDS, LEVEL_WORD, type Hazard, type Level, type Tracker } from '../data/hazards'
-import { indicatorById } from '../data/indicators'
+import { TrackerChip } from '../components/TrackerChip'
+import { StatusPill } from '../components/status'
+import { HAZARDS, LEVEL_WORD, type Hazard, type Level } from '../data/hazards'
 import { locationById } from '../data/locations'
 import { sourceById } from '../data/sources'
-import { hazardStatus, trackerAssessment, type TrackerStatus } from '../lib/hazards'
+import { hazardStatus, trackerKey, type TrackerStatus } from '../lib/hazards'
 import { useTrackerStatus } from '../lib/useTrackerStatus'
 import { useSettings } from '../lib/store'
 import { STATUS_STYLE } from '../lib/statusStyle'
@@ -119,46 +117,5 @@ function LevelMeter({ level }: { level: Level }) {
         />
       ))}
     </span>
-  )
-}
-
-const trackerKey = (t: Tracker) => (t.kind === 'indicator' ? t.id : t.kind === 'link' ? t.label : t.kind)
-
-function trackerTarget(t: Tracker): { to: string; label: string } {
-  switch (t.kind) {
-    case 'indicator':
-      return { to: `/measure?i=${t.id}`, label: indicatorById(t.id).short }
-    case 'radiation':
-      return { to: '/radiation', label: msg('Radiation dose') }
-    case 'stress':
-      return { to: '/mind?v=stress', label: msg('Stress check') }
-    case 'reaction':
-      return { to: '/mind?v=reaction', label: msg('Reaction test') }
-    case 'link':
-      return { to: t.to, label: t.label }
-  }
-}
-
-function TrackerChip({ tracker, status }: { tracker: Tracker; status: TrackerStatus }) {
-  const { to, label } = trackerTarget(tracker)
-  const assessment = trackerAssessment(tracker, status)
-  const Icon = tracker.kind === 'indicator' ? INDICATOR_ICON[tracker.id] : undefined
-  const t = useT()
-  return (
-    <Link
-      to={to}
-      className="flex min-h-11 items-center gap-1.5 rounded-full border border-line px-3 text-sm active:bg-panel-2"
-    >
-      {assessment ? (
-        <StatusIcon status={assessment.status} size={14} />
-      ) : Icon ? (
-        <Icon size={14} className="text-ink-dim" aria-hidden />
-      ) : null}
-      {t(label)}
-      {tracker.kind !== 'indicator' && tracker.kind !== 'radiation' && !assessment && (
-        <ChevronRight size={14} className="text-ink-faint" aria-hidden />
-      )}
-      {assessment && <span className="sr-only">: {t(assessment.label)}</span>}
-    </Link>
   )
 }

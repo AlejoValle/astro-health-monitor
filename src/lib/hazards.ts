@@ -8,6 +8,7 @@ export interface TrackerStatus {
   radiation?: Assessment
   stress?: Assessment
   reaction?: Assessment
+  exercise?: Assessment
 }
 
 export function trackerAssessment(tracker: Tracker, s: TrackerStatus): Assessment | undefined {
@@ -20,13 +21,21 @@ export function trackerAssessment(tracker: Tracker, s: TrackerStatus): Assessmen
       return s.stress
     case 'reaction':
       return s.reaction
+    case 'exercise':
+      return s.exercise
     case 'link':
       return undefined
   }
 }
 
-/** Worst status among the hazard's trackers that have data, or null when none has. */
-export function hazardStatus(hazard: Hazard, s: TrackerStatus): Status | null {
-  const statuses = hazard.trackers.flatMap((t) => trackerAssessment(t, s)?.status ?? [])
+/** Worst status among the trackers that have data, or null when none has. */
+export function trackersStatus(trackers: Tracker[], s: TrackerStatus): Status | null {
+  const statuses = trackers.flatMap((t) => trackerAssessment(t, s)?.status ?? [])
   return statuses.length ? worst(statuses) : null
 }
+
+/** Worst status among the hazard's trackers that have data, or null when none has. */
+export const hazardStatus = (hazard: Hazard, s: TrackerStatus) => trackersStatus(hazard.trackers, s)
+
+/** Stable React key for a tracker. */
+export const trackerKey = (t: Tracker) => (t.kind === 'indicator' ? t.id : t.kind === 'link' ? t.label : t.kind)

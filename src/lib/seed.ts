@@ -15,8 +15,8 @@ function mulberry32(seed: number) {
 }
 
 /**
- * Simulated crew member for demos: 14 days where sleep gets shorter and blood
- * pressure creeps up. Every row is tagged `simulated` and never mixed silently
+ * Simulated crew member for demos: 14 days where sleep and mood slide, resting heart rate
+ * climbs and blood pressure rises near the end, so the early warnings have a story to find. Every row is tagged `simulated` and never mixed silently
  * with real readings.
  */
 export function simulatedMission(now = Date.now(), days = 14): Omit<Reading, 'id'>[] {
@@ -29,12 +29,12 @@ export function simulatedMission(now = Date.now(), days = 14): Omit<Reading, 'id
   for (let d = days - 1; d >= 0; d--) {
     const at = now - d * DAY - 2 * 60 * 60 * 1000
     const progress = (days - 1 - d) / (days - 1)
-    push('hr', [Math.round(66 + progress * 8 + jitter(4))], at)
-    push('bp', [Math.round(116 + progress * 16 + jitter(4)), Math.round(74 + progress * 7 + jitter(3))], at)
+    push('hr', [Math.round(64 + progress * 12 + jitter(2))], at)
+    push('bp', [Math.round(112 + progress ** 2 * 20 + jitter(2)), Math.round(72 + progress ** 2 * 8 + jitter(2))], at)
     push('glucose', [Math.round(90 + jitter(6))], at)
     push('temp', [Math.round((36.7 + jitter(0.3)) * 10) / 10], at)
-    push('sleep', [Math.round((7.8 - progress * 1.6 + jitter(0.4)) * 2) / 2], at)
-    push('mood', [Math.max(1, Math.min(5, Math.round(4.2 - progress * 1.4 + jitter(0.6))))], at)
+    push('sleep', [Math.round((7.8 - progress * 2 + jitter(0.25)) * 2) / 2], at)
+    push('mood', [Math.max(1, Math.min(5, Math.round(4.6 - progress * 2.3 + jitter(0.3))))], at)
   }
   return rows
 }
@@ -54,11 +54,15 @@ export function simulatedActivity(now = Date.now(), days = 14) {
   const checks: Omit<MindCheck, 'id'>[] = []
   for (let d = days - 1; d >= 1; d--) {
     const day = now - d * DAY
-    if (d % 5 !== 3) workouts.push({ at: day, locationId: 'orbit', blockId: 'resistance', minutes: 30, origin: 'simulated' })
+    // Exercise slips as the crew member gets more tired.
+    if (d % 5 !== 3)
+      workouts.push({ at: day, locationId: 'orbit', blockId: 'resistance', minutes: Math.round(40 + d * 6), origin: 'simulated' })
     if (d % 3 === 1) checks.push({ kind: 'stress', at: day, score: 3 + ((days - d) >> 2), origin: 'simulated' })
     if (d % 7 === 6)
       checks.push({ kind: 'reaction', at: day, score: 290 + (days - d) * 3, lapses: 1, falseStarts: 0, responses: 60, origin: 'simulated' })
   }
+  // A slower reaction test yesterday, after short sleep.
+  checks.push({ kind: 'reaction', at: now - DAY, score: 345, lapses: 9, falseStarts: 1, responses: 58, origin: 'simulated' })
   return { workouts, checks }
 }
 
