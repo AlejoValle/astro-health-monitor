@@ -1,5 +1,5 @@
 import { MotionConfig } from 'motion/react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
 import { Alerts } from './screens/Alerts'
 import { BodyMap } from './screens/BodyMap'
@@ -49,6 +49,7 @@ export default function App() {
                 <Route path="alerts" element={<Alerts />} />
                 <Route path="report" element={<Report />} />
                 <Route path="body" element={<BodyMap />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Route>
             </Routes>
           </HashRouter>
