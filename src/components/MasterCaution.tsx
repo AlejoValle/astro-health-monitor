@@ -7,8 +7,9 @@ import { useT } from '../i18n'
 import { assess } from '../lib/rules'
 import { useAlerts } from '../lib/useAlerts'
 import { useLatest } from '../lib/useLatest'
+import { profileKey } from '../lib/profiles'
 
-const ACK_KEY = 'tether-master-caution-ack'
+const ACK_KEY = profileKey('tether-master-caution-ack')
 
 const readAck = (): string[] => {
   try {
@@ -33,7 +34,7 @@ export function MasterCaution() {
     ...alerts.filter((a) => a.status === 'alert').map((a) => a.id),
     ...INDICATORS.flatMap((i) => {
       const r = latest[i.id]
-      return r && assess(i.id, r.values).escalate ? [`reading-${r.id}`] : []
+      return r && assess(i.id, r.values).status === 'alert' ? [`reading-${r.id}`] : []
     }),
   ]
   const pending = items.filter((id) => !ack.includes(id))
@@ -61,11 +62,11 @@ export function MasterCaution() {
             <span className="pulse-ring absolute inset-0 rounded-full border-2 border-alert" aria-hidden />
             <OctagonAlert size={20} className="text-alert" aria-hidden />
           </span>
-          <span className="min-w-0 flex-1">
+          <span className="min-w-0 flex-1 basis-[calc(100%-3rem)] sm:basis-auto">
             <span className="block text-sm font-bold uppercase tracking-[0.18em] text-alert">{t('Master caution')}</span>
             <span className="block text-sm text-ink-dim">{t('Need action: {n}', { n: pending.length })}</span>
           </span>
-          <span className="flex gap-2">
+          <span className="flex w-full justify-end gap-2 sm:w-auto">
             <Link to="/alerts" className="flex min-h-10 items-center rounded-full border border-alert/50 px-4 text-sm font-semibold text-alert">
               {t('Review')}
             </Link>

@@ -1,4 +1,4 @@
-import { AudioLines, BellRing, BookOpen, ChartLine, ChevronRight, FileText, FlaskConical, PersonStanding } from 'lucide-react'
+import { AudioLines, BellRing, BookOpen, ChartLine, ChevronRight, FileText, FlaskConical, PersonStanding, Users } from 'lucide-react'
 import { useT } from '../i18n'
 import { msg } from '../i18n/msg'
 import { Link } from 'react-router-dom'
@@ -31,6 +31,8 @@ const QUICK_LINKS = [
   { to: '/trends', label: msg('Trends'), icon: ChartLine },
   { to: '/sounds', label: msg('Sounds'), icon: AudioLines },
   { to: '/sources', label: msg('Sources'), icon: BookOpen },
+  { to: '/crew', label: msg('Crew'), icon: Users },
+  { to: '/scenarios', label: msg('Use cases'), icon: FlaskConical },
 ]
 
 export function Home() {

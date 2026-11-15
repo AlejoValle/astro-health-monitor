@@ -20,6 +20,8 @@ Tether is a web app designed for a phone worn on the wrist. A crew member measur
 | Alerts | Sees early warnings found in their own history: streaks out of range, worsening trends, values heading out of range within a week, and combined patterns such as accumulated fatigue, sleep debt, early infection signs and exercise below target |
 | Report | Writes a note and copies, shares or downloads a plain-text report for the flight surgeon with vitals, warnings, radiation, exercise and mind checks, always in English for the ground team |
 | Body map | Taps a body system (brain, eyes, heart, immune, gut, bones, muscles) to see what it does, what space does to it, its status from the crew member's data, and filters by hazard |
+| Crew | Adds, edits, switches and removes crew profiles on a shared device; each has its own readings, routine, dose and settings |
+| Use cases | Opens demo crew members with 14 days of simulated data (healthy, early infection, isolation and low mood, sleep deprivation, rising blood pressure, solar storm exposure, skipping exercise) to see how Tether reacts |
 | Measure | Reads heart rate from a Bluetooth sensor, or types any reading by hand, with instructions on how to take it |
 | Symptoms | Taps the part of the body that feels wrong and answers yes/no questions to get a likely explanation, self-care steps and an escalation level |
 | Mind | Rates mood, answers a four-question stress check and takes a reaction test |
@@ -44,6 +46,8 @@ The mission location is chosen in the header: Earth orbit, deep space transit, l
 - **Motion with restraint.** A canvas starfield with orbit rings around the current body, a short warp jump between screens, staggered entrances and numbers that count up. All of it is off when the system asks for reduced motion.
 - **Device preview.** In a desktop browser, a Web / Tablet / Phone switch shows the real app in a device frame, so judges can try the phone layout without a phone.
 - **Early warnings as rules.** `src/lib/alerts.ts` looks at the last 14 days: a streak of 3 or more days out of range, the last 3 days against the days before, a least-squares projection that would leave the OK range within 7 days, and patterns where several signals each move part of the way in the same direction. Every warning says why it fired and what to do. A test checks the simulated mission always shows a fatigue pattern.
+- **Crew profiles.** Each profile opens its own IndexedDB database and settings (`src/lib/profiles.ts`), so readings never mix; switching reloads the app on that profile. The profile that existed before keeps its original data.
+- **Use cases with a test.** `src/data/scenarios.ts` defines seven demo crew members and the warnings each must trigger; `src/lib/scenarios.test.ts` checks every one, and that the healthy one triggers none.
 - **Live NASA space weather.** The Radiation screen downloads the last 14 days of NASA DONKI notifications (solar energetic particles, flares, geomagnetic storms, radiation belt enhancements, CMEs) from api.nasa.gov when a link is available and caches them on the device, so the last known picture is there offline. Particles in the last 3 days open the solar storm steps. Set `VITE_NASA_API_KEY` to use your own key instead of `DEMO_KEY`.
 - **Personal baseline.** Each vital is compared with the crew member's own normal: the median of readings before the mission start, or of the first three readings.
 - **Data labels.** Badges say where a number comes from: NASA source, NASA live data, clinical range, app rule or simulated.

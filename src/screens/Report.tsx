@@ -18,8 +18,9 @@ import { useLatest } from '../lib/useLatest'
 import { useRadiation } from '../lib/useRadiation'
 import { useNow, useRecords } from '../lib/useRecords'
 import { useRoutine } from '../lib/useRoutine'
+import { profileKey } from '../lib/profiles'
 
-const NOTE_KEY = 'astrovitals-report-note'
+const NOTE_KEY = profileKey('astrovitals-report-note')
 
 const readNote = () => {
   try {

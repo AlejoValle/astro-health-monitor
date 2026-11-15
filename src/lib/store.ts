@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { getActiveProfileId, settingsKeyFor } from './profiles'
 import type { LocationId } from '../data/locations'
 import type { SolarActivity } from '../data/radiation'
 import type { Lang } from '../i18n'
@@ -38,6 +39,7 @@ export const useSettings = create<Settings>()(
       language: 'en',
       setLanguage: (language) => set({ language }),
     }),
-    { name: 'astrovitals-settings' },
+    // Each crew profile keeps its own settings: language, location and mission.
+    { name: settingsKeyFor(getActiveProfileId()) },
   ),
 )

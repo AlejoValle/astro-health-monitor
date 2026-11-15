@@ -3,6 +3,8 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
 import { Alerts } from './screens/Alerts'
 import { BodyMap } from './screens/BodyMap'
+import { Crew } from './screens/Crew'
+import { Scenarios } from './screens/Scenarios'
 import { DeviceStage, DeviceSwitcher } from './components/DevicePreview'
 import { IntroSplash } from './components/IntroSplash'
 import { useDesktopWeb, usePreview } from './lib/devicePreview'
@@ -49,6 +51,8 @@ export default function App() {
                 <Route path="alerts" element={<Alerts />} />
                 <Route path="report" element={<Report />} />
                 <Route path="body" element={<BodyMap />} />
+                <Route path="crew" element={<Crew />} />
+                <Route path="scenarios" element={<Scenarios />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>
             </Routes>

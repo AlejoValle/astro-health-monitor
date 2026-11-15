@@ -1,11 +1,13 @@
 import { ChevronRight, Languages } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import { locationById } from '../data/locations'
 import { LANGUAGES, useT } from '../i18n'
 import { useIntro } from '../lib/intro'
 import { useSettings } from '../lib/store'
 import { warp } from '../lib/warp'
+import { getActiveProfileId, useProfiles } from '../lib/profiles'
+import { Avatar } from './Avatar'
 import { BottomNav } from './BottomNav'
 import { LanguageSheet } from './LanguageSheet'
 import { MasterCaution } from './MasterCaution'
@@ -21,6 +23,8 @@ export function AppShell() {
   const [languageOpen, setLanguageOpen] = useState(false)
   const language = useSettings((s) => s.language)
   const t = useT()
+  const profiles = useProfiles()
+  const profile = profiles.find((p) => p.id === getActiveProfileId()) ?? profiles[0]
   const { pathname } = useLocation()
   const introDone = useIntro((s) => s.done)
 
@@ -39,10 +43,15 @@ export function AppShell() {
       <SpaceBackdrop />
       <div className="relative z-10 mx-auto min-h-full w-full max-w-md px-4 pb-32 pt-[max(1rem,env(safe-area-inset-top))] md:max-w-2xl lg:max-w-5xl lg:pb-10 lg:pl-32">
         <header className="page-header mb-5 flex items-center justify-between gap-3">
-          <div>
-            <p className="label">Tether</p>
-            <p className="text-sm text-ink-dim">{t(location.gravity)}</p>
-          </div>
+          <Link to="/crew" className="press flex min-w-0 items-center gap-2.5" aria-label={t('Crew')}>
+            <Avatar profile={profile} size={36} />
+            <span className="min-w-0">
+              <span className="label block">Tether</span>
+              <span className="block truncate text-sm text-ink-dim" title={t(location.gravity)}>
+                {profile.name}
+              </span>
+            </span>
+          </Link>
           <div className="flex items-center gap-2">
             <button
               type="button"

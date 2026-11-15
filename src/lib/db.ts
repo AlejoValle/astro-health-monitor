@@ -1,4 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie'
+import { dbNameFor, getActiveProfileId } from './profiles'
 import type { IndicatorId } from '../data/indicators'
 import type { LocationId } from '../data/locations'
 
@@ -39,25 +40,38 @@ export interface Dose {
   origin: 'manual' | 'simulated'
 }
 
-export const db = new Dexie('astrovitals') as Dexie & {
+export type TetherDb = Dexie & {
   readings: EntityTable<Reading, 'id'>
   checks: EntityTable<MindCheck, 'id'>
   workouts: EntityTable<Workout, 'id'>
   doses: EntityTable<Dose, 'id'>
 }
 
-db.version(1).stores({
-  readings: '++id, indicatorId, at, origin, [indicatorId+at]',
-})
-db.version(2).stores({
-  checks: '++id, [kind+at]',
-})
-db.version(3).stores({
-  workouts: '++id, at',
-})
-db.version(4).stores({
-  doses: '++id, at, origin',
-})
+/** Opens one crew member's database. Every profile has the same schema. */
+export function openDb(name: string): TetherDb {
+  const d = new Dexie(name) as TetherDb
+  d.version(1).stores({
+    readings: '++id, indicatorId, at, origin, [indicatorId+at]',
+  })
+  d.version(2).stores({
+    checks: '++id, [kind+at]',
+  })
+  d.version(3).stores({
+    workouts: '++id, at',
+  })
+  d.version(4).stores({
+    doses: '++id, at, origin',
+  })
+  return d
+}
+
+/** The active crew member's database. Switching profile reloads the app, so this stays fixed. */
+export const db = openDb(dbNameFor(getActiveProfileId()))
+
+/** Deletes a crew member's database. */
+export function deleteProfileData(id: string) {
+  return Dexie.delete(dbNameFor(id))
+}
 
 export function addDose(mSv: number) {
   return db.doses.add({ mSv, at: Date.now(), origin: 'manual' })

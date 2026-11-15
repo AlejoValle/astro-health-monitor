@@ -3,11 +3,12 @@ import { SLOT_LABEL } from '../data/routine'
 import { translate } from '../i18n'
 import { useSettings } from './store'
 import { slotOf, startOfDay, type TaskStatus } from './routine'
+import { profileKey } from './profiles'
 
 /** Browser notifications need the API and a secure context (https or localhost). */
 export const notificationsAvailable = () => typeof Notification !== 'undefined' && window.isSecureContext
 
-const KEY = 'astrovitals-reminded'
+const KEY = profileKey('astrovitals-reminded')
 
 /**
  * Sends one notification per routine slot and day when that slot has tasks due.
