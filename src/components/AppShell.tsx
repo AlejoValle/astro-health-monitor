@@ -8,6 +8,7 @@ import { useSettings } from '../lib/store'
 import { warp } from '../lib/warp'
 import { BottomNav } from './BottomNav'
 import { LanguageSheet } from './LanguageSheet'
+import { MasterCaution } from './MasterCaution'
 import { LOCATION_ICON, LocationSheet } from './LocationSheet'
 import { ProgressToast } from './ProgressToast'
 import { SpaceBackdrop } from './SpaceBackdrop'
@@ -64,6 +65,8 @@ export function AppShell() {
             </button>
           </div>
         </header>
+
+        <MasterCaution />
 
         <main>
           {/* Keyed by route, and by the intro, so each screen plays its entrance when it is first seen. */}

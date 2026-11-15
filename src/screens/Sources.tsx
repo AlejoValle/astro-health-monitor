@@ -2,6 +2,8 @@ import { SourceList } from '../components/SourceList'
 import { useT } from '../i18n'
 import { msg } from '../i18n/msg'
 import { SOURCES, type Source } from '../data/sources'
+import { DataBadge } from '../components/DataBadge'
+import { DATA_KIND, type DataKind } from '../data/dataKinds'
 
 const GROUPS: { kind: Source['kind']; title: string; note: string }[] = [
   { kind: 'nasa', title: msg('NASA'), note: msg('What spaceflight does to the body, and how crews counter it.') },
@@ -45,6 +47,18 @@ export function Sources() {
           </section>
         )
       })}
+
+      <section className="panel rounded-3xl p-5">
+        <h2 className="label">{t('What the labels mean')}</h2>
+        <ul className="mt-3 space-y-3">
+          {(Object.keys(DATA_KIND) as DataKind[]).map((k) => (
+            <li key={k} className="flex flex-wrap items-center gap-2 text-sm">
+              <DataBadge kind={k} />
+              <span className="text-ink-dim">{t(DATA_KIND[k].note)}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <section className="panel rounded-3xl p-5">
         <h2 className="label">{t('Decided by this app')}</h2>

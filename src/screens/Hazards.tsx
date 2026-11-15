@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react'
 import { useT } from '../i18n'
 import { msg } from '../i18n/msg'
 import { HAZARD_ICON } from '../components/HazardSummary'
+import { DataBadge } from '../components/DataBadge'
 import { TrackerChip } from '../components/TrackerChip'
 import { StatusPill } from '../components/status'
 import { HAZARDS, LEVEL_WORD, type Hazard, type Level } from '../data/hazards'
@@ -79,7 +80,7 @@ function HazardCard({ hazard, status }: { hazard: Hazard; status: TrackerStatus 
         <LevelMeter level={here.level} />
         <p className="text-sm">
           <span className="font-medium">{t('{level} here.', { level: t(LEVEL_WORD[here.level]) })} </span>
-          <span className="text-ink-dim">{t(here.why)}</span>
+          <span className="text-ink-dim">{t(here.why)}</span> <DataBadge kind="app" />
         </p>
       </div>
 

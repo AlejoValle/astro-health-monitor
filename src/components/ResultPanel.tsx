@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import type { Indicator } from '../data/indicators'
 import { useT } from '../i18n'
+import { compareToBaseline } from '../lib/baseline'
 import { assess, formatValue } from '../lib/rules'
+import { useBaselines } from '../lib/useBaselines'
+import { DataBadge } from './DataBadge'
 import { STATUS_STYLE } from '../lib/statusStyle'
 import { ContactBanner } from './ContactBanner'
 import { SourceList } from './SourceList'
@@ -11,6 +14,8 @@ export function ResultPanel({ indicator, values }: { indicator: Indicator; value
   const assessment = assess(indicator.id, values)
   const style = STATUS_STYLE[assessment.status]
   const t = useT()
+  const baseline = useBaselines()[indicator.id]
+  const change = baseline && compareToBaseline(indicator.id, values, baseline)
 
   return (
     <div className="space-y-4">
@@ -30,6 +35,30 @@ export function ResultPanel({ indicator, values }: { indicator: Indicator; value
         <p className={`mt-2 text-lg font-semibold ${style.text}`}>{t(assessment.label)}</p>
       </section>
 
+      {baseline && change && (
+        <section className="panel rounded-3xl p-5">
+          <h2 className="label">{t('Compared with you')}</h2>
+          <p className="mt-2 text-lg leading-snug">
+            {change.notable
+              ? t('{delta} {unit} from your baseline of {base}.', {
+                  delta: `${change.delta > 0 ? '+' : ''}${change.delta}`,
+                  unit: indicator.unit,
+                  base: formatValue(indicator.id, baseline.values.map((v) => Math.round(v * 10) / 10)),
+                })
+              : t('Close to your baseline of {base} {unit}.', {
+                  base: formatValue(indicator.id, baseline.values.map((v) => Math.round(v * 10) / 10)),
+                  unit: indicator.unit,
+                })}
+          </p>
+          <p className="mt-1 text-xs text-ink-dim">
+            {baseline.source === 'preflight'
+              ? t('Baseline: the median of your {n} readings before the mission started.', { n: baseline.count })
+              : t('Baseline: the median of your first {n} readings.', { n: baseline.count })}{' '}
+            {t('In space, a change from your own normal can matter even inside the clinical range.')}
+          </p>
+        </section>
+      )}
+
       <section className="panel rounded-3xl p-5">
         <h2 className="label">{t('What to do')}</h2>
         <p className="mt-2 text-lg leading-snug">{t(assessment.advice)}</p>
@@ -40,7 +69,9 @@ export function ResultPanel({ indicator, values }: { indicator: Indicator; value
       <section className="panel rounded-3xl p-5">
         <h2 className="label">{t('Why we check this')}</h2>
         <p className="mt-2 text-sm text-ink-dim">{t(indicator.why)}</p>
-        <h2 className="label mt-4">{t('Based on')}</h2>
+        <h2 className="label mt-4 flex items-center gap-2">
+          {t('Based on')} <DataBadge kind="clinical" />
+        </h2>
         <SourceList sourceIds={indicator.sourceIds} />
         <p className="mt-3 text-xs text-ink-faint">{t('Guidance for self-care, not a medical diagnosis.')}</p>
       </section>

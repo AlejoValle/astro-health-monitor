@@ -2,6 +2,8 @@ import { FlaskConical, Radiation as RadiationIcon, ShieldAlert, Sun } from 'luci
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { ContactBanner } from '../components/ContactBanner'
+import { DataBadge } from '../components/DataBadge'
+import { SpaceWeatherCard } from '../components/SpaceWeatherCard'
 import { CountUp } from '../components/CountUp'
 import { NumberField } from '../components/NumberField'
 import { SourceList } from '../components/SourceList'
@@ -31,6 +33,9 @@ import { expectedRate } from '../lib/radiation'
 import { useSettings } from '../lib/store'
 import { STATUS_STYLE } from '../lib/statusStyle'
 import { useRadiation } from '../lib/useRadiation'
+import { assessSpaceWeather } from '../lib/spaceWeather'
+import { useNow } from '../lib/useRecords'
+import { useSpaceWeather } from '../lib/useSpaceWeather'
 
 const EARTH_PER_DAY = EARTH_BACKGROUND_MSV_PER_YEAR / 365
 
@@ -54,6 +59,8 @@ function describeDays(days: number, t: (text: string, vars?: Vars) => string) {
 
 export function Radiation() {
   const state = useRadiation()
+  const weather = useSpaceWeather()
+  const now = useNow()
   const locationId = useSettings((s) => s.locationId)
   const t = useT()
   const locale = useLocale()
@@ -129,10 +136,19 @@ export function Radiation() {
         </section>
       )}
 
-      <StormProtocol />
+      <SpaceWeatherCard state={weather} />
+
+      {/* Opens by itself when NASA reports solar particles arriving. */}
+      {(() => {
+        const urgent = !!weather.data && assessSpaceWeather(weather.data.events, now, locationId).status === 'alert'
+        return <StormProtocol key={String(urgent)} urgent={urgent} />
+      })()}
 
       <section className="panel rounded-3xl p-5">
-        <h2 className="label">{t('Dose rate here')}</h2>
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="label">{t('Dose rate here')}</h2>
+          <DataBadge kind="nasa" />
+        </div>
         <RateRow />
         <p className="mt-2 text-sm text-ink-dim">{t(SHIELDING[locationId])}</p>
         {measured !== null && rate && (
@@ -260,8 +276,8 @@ function RateRow() {
   )
 }
 
-function StormProtocol() {
-  const [open, setOpen] = useState(false)
+function StormProtocol({ urgent }: { urgent: boolean }) {
+  const [open, setOpen] = useState(urgent)
   const locationId = useSettings((s) => s.locationId)
   const t = useT()
   return (

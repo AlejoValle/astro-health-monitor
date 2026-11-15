@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import type { Indicator, IndicatorId } from '../data/indicators'
 import type { Reading } from '../lib/db'
 import { useT } from '../i18n'
+import { compareToBaseline, type Baseline } from '../lib/baseline'
 import { assess, formatValue } from '../lib/rules'
 import { CountUp } from './CountUp'
 import { StatusPill } from './status'
@@ -16,7 +17,7 @@ export const INDICATOR_ICON: Record<IndicatorId, typeof HeartPulse> = {
   mood: Smile,
 }
 
-export function IndicatorCard({ indicator, reading }: { indicator: Indicator; reading?: Reading }) {
+export function IndicatorCard({ indicator, reading, baseline }: { indicator: Indicator; reading?: Reading; baseline?: Baseline }) {
   const Icon = INDICATOR_ICON[indicator.id]
   const assessment = reading && assess(indicator.id, reading.values)
   const t = useT()
@@ -45,6 +46,7 @@ export function IndicatorCard({ indicator, reading }: { indicator: Indicator; re
             </span>
             <span className="text-sm text-ink-dim">{indicator.unit}</span>
           </p>
+          <BaselineLine indicator={indicator} reading={reading} baseline={baseline} />
           <div>
             <StatusPill status={assessment.status} label={assessment.label} />
           </div>
@@ -56,5 +58,18 @@ export function IndicatorCard({ indicator, reading }: { indicator: Indicator; re
         </>
       )}
     </Link>
+  )
+}
+
+/** One line comparing the latest reading with the crew member's own baseline. */
+function BaselineLine({ indicator, reading, baseline }: { indicator: Indicator; reading: Reading; baseline?: Baseline }) {
+  const t = useT()
+  if (!baseline) return null
+  const c = compareToBaseline(indicator.id, reading.values, baseline)
+  if (!c.notable) return <p className="text-[11px] text-ink-faint">{t('Near your baseline')}</p>
+  return (
+    <p className={`text-[11px] font-medium ${c.worse ? 'text-watch' : 'text-ink-dim'}`}>
+      {t('{delta} vs your baseline', { delta: `${c.delta > 0 ? '+' : ''}${c.delta}` })}
+    </p>
   )
 }

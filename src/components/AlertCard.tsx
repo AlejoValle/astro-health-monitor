@@ -5,7 +5,16 @@ import { msg } from '../i18n/msg'
 import type { AlertKind, HealthAlert } from '../lib/alerts'
 import { STATUS_STYLE } from '../lib/statusStyle'
 import { ContactBanner } from './ContactBanner'
+import { DataBadge } from './DataBadge'
 import { StatusIcon } from './status'
+
+/** The rule behind each kind of warning, in plain words. */
+const WHY: Record<AlertKind, string> = {
+  streak: msg('This shows when 3 or more daily readings in a row are outside the OK range. Seven days in a row raises it to Act.'),
+  trend: msg('This shows when your last 3 days are worse than the days before by more than normal day-to-day change.'),
+  projection: msg('A straight line through your last 10 days crosses the OK limit within 7 days. It is a heads-up, not a certainty.'),
+  pattern: msg('Several signals each move part of the way in the same direction. Alone none would warn; together they point to one likely cause.'),
+}
 
 const KIND_LABEL: Record<AlertKind, string> = {
   pattern: msg('Pattern'),
@@ -29,6 +38,7 @@ export function AlertCard({ alert, compact = false }: { alert: HealthAlert; comp
           {t(style.word)}
         </span>
         <span className="rounded-full border border-line px-2 py-0.5 text-[11px] text-ink-dim">{t(KIND_LABEL[alert.kind])}</span>
+        {!compact && <DataBadge kind="app" />}
       </div>
       <p className="mt-2 font-semibold leading-snug">{t(alert.title, vars)}</p>
       <p className="mt-1 text-sm text-ink-dim">{t(alert.detail, vars)}</p>
@@ -48,6 +58,13 @@ export function AlertCard({ alert, compact = false }: { alert: HealthAlert; comp
     <article className={`panel rounded-3xl border-l-4 p-5 ${edge}`}>
       {body}
       {alert.series && <Sparkline series={alert.series} />}
+      <details className="group mt-3 rounded-2xl bg-white/[0.03] px-3 py-2 text-sm">
+        <summary className="flex min-h-9 cursor-pointer list-none items-center gap-2 font-medium text-accent">
+          <span className="inline-block transition-transform group-open:rotate-90" aria-hidden>›</span>
+          {t('Why am I seeing this?')}
+        </summary>
+        <p className="mt-1 pb-1 text-ink-dim">{t(WHY[alert.kind])}</p>
+      </details>
       <ul className="mt-3 flex flex-wrap gap-2">
         {alert.topics.map((topic) => (
           <li key={topic} className="rounded-full bg-white/6 px-2.5 py-1 text-xs text-ink-dim">

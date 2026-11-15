@@ -14,6 +14,7 @@ import { clearSimulatedMission, loadSimulatedMission } from '../lib/seed'
 import { useSoundPlayer } from '../lib/soundPlayer'
 import { STATUS_STYLE } from '../lib/statusStyle'
 import { useAlerts } from '../lib/useAlerts'
+import { useBaselines } from '../lib/useBaselines'
 import { useLatest } from '../lib/useLatest'
 import { useRadiation } from '../lib/useRadiation'
 
@@ -36,6 +37,7 @@ export function Home() {
   const latest = useLatest()
   const radiation = useRadiation()
   const alerts = useAlerts()
+  const baselines = useBaselines()
   const soundPlaying = useSoundPlayer((s) => s.playing !== null)
   const t = useT()
 
@@ -141,7 +143,7 @@ export function Home() {
           </div>
           <div className="reveal-list grid grid-cols-2 gap-3 md:grid-cols-3">
             {INDICATORS.map((indicator) => (
-              <IndicatorCard key={indicator.id} indicator={indicator} reading={latest[indicator.id]} />
+              <IndicatorCard key={indicator.id} indicator={indicator} reading={latest[indicator.id]} baseline={baselines[indicator.id]} />
             ))}
           </div>
         </section>

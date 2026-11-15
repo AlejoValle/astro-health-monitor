@@ -38,7 +38,7 @@ export interface AlertInput {
 }
 
 /** Which direction is worse for each indicator's main number. */
-const WORSE: Record<IndicatorId, 1 | -1> = { hr: 1, bp: 1, glucose: 1, temp: 1, sleep: -1, mood: -1 }
+export const WORSE: Record<IndicatorId, 1 | -1> = { hr: 1, bp: 1, glucose: 1, temp: 1, sleep: -1, mood: -1 }
 
 const ACTIONS: Record<IndicatorId, string[]> = {
   hr: [msg('Measure at rest at the same time each morning.'), msg('Note any dizziness, palpitations or chest discomfort.')],

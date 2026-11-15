@@ -1,5 +1,6 @@
-import { ChevronLeft, ChevronRight, ListChecks, Smile, Timer } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { ChevronLeft, ChevronRight, ListChecks, Smile, Timer, Wind } from 'lucide-react'
+import { Breathing } from '../components/Breathing'
+import { useCallback, useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { ReactionTest } from '../components/ReactionTest'
 import { SourceList } from '../components/SourceList'
@@ -28,6 +29,7 @@ export function Mind() {
   const view = params.get('v')
   if (view === 'stress') return <StressCheck />
   if (view === 'reaction') return <Reaction />
+  if (view === 'breathe') return <Breathe />
   return <MindHub />
 }
 
@@ -67,6 +69,12 @@ function MindHub() {
           title={msg('Reaction test')}
           hint={msg('A tap game that shows fatigue.')}
           assessment={lastReaction && assessReaction(toSummary(lastReaction), baselineOf(reaction.slice(0, -1)))}
+        />
+        <HubCard
+          to="/mind?v=breathe"
+          icon={<Wind size={26} strokeWidth={1.5} />}
+          title={msg('Breathing')}
+          hint={msg('4-7-8 breathing to calm down. About 1 minute.')}
         />
       </ul>
       <History stress={stress} reaction={reaction} />
@@ -362,6 +370,41 @@ function Stat({ label, value }: { label: string; value: number }) {
     <div className="panel rounded-2xl p-3">
       <p className="text-2xl font-semibold tabular-nums">{value}</p>
       <p className="text-xs text-ink-dim">{t(label)}</p>
+    </div>
+  )
+}
+
+function Breathe() {
+  const t = useT()
+  const [state, setState] = useState<'ready' | 'running' | 'done'>('ready')
+  const finish = useCallback(() => setState('done'), [])
+
+  return (
+    <div className="mx-auto max-w-xl space-y-5">
+      <div>
+        <BackToMind />
+        <h1 className="text-3xl font-semibold tracking-tight">{t('Breathing')}</h1>
+        <p className="mt-2 text-sm text-ink-dim">
+          {t('Breathe in for 4 seconds, hold for 7, breathe out for 8. Four rounds. Slow breathing can help you settle after stress or before sleep.')}
+        </p>
+      </div>
+      {state === 'running' ? (
+        <Breathing onDone={finish} />
+      ) : (
+        <section className="panel rounded-3xl p-6 text-center">
+          <p className="text-lg font-semibold">{state === 'done' ? t('Well done. Notice how you feel now.') : t('Find a steady position and relax your shoulders.')}</p>
+          <button
+            type="button"
+            onClick={() => setState('running')}
+            className="mt-5 flex min-h-14 w-full items-center justify-center rounded-2xl bg-ink font-semibold text-space"
+          >
+            {state === 'done' ? t('Again') : t('Start')}
+          </button>
+        </section>
+      )}
+      <p className="px-1 text-xs text-ink-faint">
+        {t('A common relaxation technique. Offering it here is this app’s choice, not a NASA protocol. Stop if you feel lightheaded.')}
+      </p>
     </div>
   )
 }
