@@ -15,8 +15,8 @@ export default defineConfig({
       includeAssets: ['favicon.svg'],
       workbox: { globPatterns: ['**/*.{js,css,html,svg,png,woff2}'], skipWaiting: true, clientsClaim: true },
       manifest: {
-        name: 'AstroVitals',
-        short_name: 'AstroVitals',
+        name: 'Tether',
+        short_name: 'Tether',
         description: 'Offline-first health self-monitoring for astronauts on long-duration missions.',
         start_url: '.',
         scope: '.',

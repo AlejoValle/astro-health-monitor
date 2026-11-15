@@ -30,7 +30,7 @@ export function useReminders(enabled: boolean, statuses: TaskStatus[] | undefine
       // Without storage we may remind twice; better than not at all.
     }
     const lang = useSettings.getState().language
-    new Notification(`AstroVitals · ${translate(lang, SLOT_LABEL[slot])}`, {
+    new Notification(`Tether · ${translate(lang, SLOT_LABEL[slot])}`, {
       body: due.map((s) => translate(lang, s.task.label)).join(' · '),
       icon: 'icon-192.png',
       tag: id,

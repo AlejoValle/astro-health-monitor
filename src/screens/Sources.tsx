@@ -55,7 +55,7 @@ export function Sources() {
           ))}
         </ul>
         <p className="mt-4 text-xs text-ink-faint">
-          {t('AstroVitals is a self-care guide. It does not diagnose and does not replace the flight surgeon.')}
+          {t('Tether is a self-care guide. It does not diagnose and does not replace the flight surgeon.')}
         </p>
       </section>
     </div>

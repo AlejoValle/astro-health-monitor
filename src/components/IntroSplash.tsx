@@ -13,11 +13,8 @@ const HOLD_REDUCED_MS = 900
 // The app's logo: the heartbeat line from the icon, in a 64 × 64 box.
 const PULSE = 'M8 34h12l5-14 9 28 6-18 4 4h12'
 
-// "Astro" in white, "Vitals" in the accent colour, one entry per letter.
-const LETTERS = [
-  ...[...'Astro'].map((ch) => ({ ch, className: 'text-ink' })),
-  ...[...'Vitals'].map((ch) => ({ ch, className: 'text-accent' })),
-]
+// The name, one entry per letter, in white with the accent on the first letter.
+const LETTERS = [...'Tether'].map((ch, i) => ({ ch, className: i === 0 ? 'text-accent' : 'text-ink' }))
 
 /**
  * Opening animation shown every time the app starts, like a game or streaming logo:
@@ -57,7 +54,7 @@ export function IntroSplash({ onDone }: { onDone: () => void }) {
         if (leaving) onDone()
       }}
     >
-      <span className="sr-only">{t('AstroVitals is starting. Press any key to skip.')}</span>
+      <span className="sr-only">{t('Tether is starting. Press any key to skip.')}</span>
 
       {/* Soft glow that breathes behind the logo. */}
       <motion.div

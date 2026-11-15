@@ -1,11 +1,13 @@
-# AstroVitals
+# Tether
+
+Crew health on a tether to Earth. Live app: https://tether-crew.vercel.app
 
 Health self-monitoring for astronauts on long-duration missions, built for the NASA Space Apps Challenge 2026:
 [Create Health Monitoring Software for Astronauts on Space Missions](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/).
 
-AstroVitals is a web app designed for a phone worn on the wrist. A crew member measures, sees at a glance how they are doing, and is told in plain language what to do next and when to contact the crew medical officer or the flight surgeon. It runs entirely on the device, so it keeps working when there is no link to Earth.
+Tether is a web app designed for a phone worn on the wrist. A crew member measures, sees at a glance how they are doing, and is told in plain language what to do next and when to contact the crew medical officer or the flight surgeon. It runs entirely on the device, so it keeps working when there is no link to Earth.
 
-> AstroVitals is a self-care and triage guide. It does not diagnose and does not replace a flight surgeon. It has not been clinically validated.
+> Tether is a self-care and triage guide. It does not diagnose and does not replace a flight surgeon. It has not been clinically validated.
 
 ## What it does
 

@@ -148,7 +148,7 @@ function EmbeddedApp() {
   return (
     <iframe
       src={src}
-      title="AstroVitals preview"
+      title="Tether preview"
       className="w-full flex-1 border-0 bg-space"
       onLoad={(e) => {
         const inner = e.currentTarget.contentWindow

@@ -33,7 +33,7 @@ export function buildReport(r: ReportInput): string {
   const lines: string[] = []
   const section = (title: string) => lines.push('', title)
 
-  lines.push('ASTROVITALS HEALTH REPORT')
+  lines.push('TETHER HEALTH REPORT')
   lines.push(`Generated: ${stamp(r.generatedAt)}`)
   lines.push(`Location: ${r.location.name} (${r.location.gravity}). Contact: ${r.location.contact}.`)
   if (r.missionDay !== null) lines.push(`Mission day: ${r.missionDay}`)
@@ -77,6 +77,6 @@ export function buildReport(r: ReportInput): string {
   section('CREW NOTE')
   lines.push(r.note.trim() || 'None.')
 
-  lines.push('', 'Self-care guidance from AstroVitals, not a diagnosis. Rules and sources are listed in the app.')
+  lines.push('', 'Self-care guidance from Tether, not a diagnosis. Rules and sources are listed in the app.')
   return lines.join('\n')
 }

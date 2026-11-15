@@ -1,5 +1,6 @@
 import { BODY_SYSTEMS, type SystemId } from '../data/bodySystems'
 import { useT } from '../i18n'
+import { BodySilhouette } from './BodySilhouette'
 import { msg } from '../i18n/msg'
 import type { Status } from '../lib/rules'
 
@@ -39,15 +40,7 @@ export function BodyMapFigure({
   const t = useT()
   return (
     <svg viewBox="-70 0 340 420" className="mx-auto h-auto w-full max-w-sm" aria-hidden>
-      <g className="fill-white/[0.04] stroke-accent/35" strokeWidth="1.5">
-        <ellipse cx="100" cy="40" rx="26" ry="30" />
-        <rect x="90" y="68" width="20" height="14" rx="4" />
-        <path d="M58 92 Q60 82 76 80 L124 80 Q140 82 142 92 L146 200 Q146 214 132 214 L68 214 Q54 214 54 200 Z" />
-        <rect x="30" y="94" width="18" height="128" rx="9" />
-        <rect x="152" y="94" width="18" height="128" rx="9" />
-        <rect x="66" y="216" width="30" height="190" rx="14" />
-        <rect x="104" y="216" width="30" height="190" rx="14" />
-      </g>
+      <BodySilhouette />
 
       {BODY_SYSTEMS.map((system) => {
         const status = statuses[system.id]

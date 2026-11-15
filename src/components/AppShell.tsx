@@ -39,7 +39,7 @@ export function AppShell() {
       <div className="relative z-10 mx-auto min-h-full w-full max-w-md px-4 pb-32 pt-[max(1rem,env(safe-area-inset-top))] md:max-w-2xl lg:max-w-5xl lg:pb-10 lg:pl-32">
         <header className="page-header mb-5 flex items-center justify-between gap-3">
           <div>
-            <p className="label">AstroVitals</p>
+            <p className="label">Tether</p>
             <p className="text-sm text-ink-dim">{t(location.gravity)}</p>
           </div>
           <div className="flex items-center gap-2">

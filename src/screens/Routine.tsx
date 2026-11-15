@@ -295,7 +295,7 @@ function ReminderToggle() {
       {available && reminders && (
         <p className="mt-3 text-xs text-ink-faint">
           {t(
-            'Reminders come while AstroVitals is open or installed on this device. There is no server, so nothing is sent when it is closed.',
+            'Reminders come while Tether is open or installed on this device. There is no server, so nothing is sent when it is closed.',
           )}
         </p>
       )}

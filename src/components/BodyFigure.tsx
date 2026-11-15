@@ -1,49 +1,63 @@
+import { useId } from 'react'
 import type { AreaId } from '../data/symptomTree'
+import { BodySilhouette } from './BodySilhouette'
+import { BODY_OUTLINE } from './bodyOutline'
 
-/** Body zones, drawn with the same outline as the body map so both screens look alike. */
-const ZONES: { area: AreaId; shapes: React.ReactNode }[] = [
-  {
-    area: 'head',
-    shapes: (
-      <>
-        <ellipse cx="100" cy="40" rx="26" ry="30" />
-        <rect x="90" y="68" width="20" height="14" rx="4" />
-      </>
-    ),
-  },
-  { area: 'chest', shapes: <path d="M58 92 Q60 82 76 80 L124 80 Q140 82 142 92 L144 146 L56 146 Z" /> },
-  { area: 'stomach', shapes: <path d="M56 150 L144 150 L146 200 Q146 214 132 214 L68 214 Q54 214 54 200 Z" /> },
-  {
-    area: 'muscles',
-    shapes: (
-      <>
-        <rect x="30" y="94" width="18" height="128" rx="9" />
-        <rect x="152" y="94" width="18" height="128" rx="9" />
-        <rect x="66" y="218" width="30" height="188" rx="14" />
-        <rect x="104" y="218" width="30" height="188" rx="14" />
-      </>
-    ),
-  },
+/** Horizontal bands of the torso outline that make up each torso zone. */
+const BANDS: { area: AreaId; y: number; h: number }[] = [
+  { area: 'chest', y: 70, h: 78 },
+  { area: 'stomach', y: 148, h: 70 },
 ]
 
-/** Decorative tap target; the labelled buttons next to it are the accessible control. */
+const ZONE = 'cursor-pointer fill-transparent transition-colors duration-200 hover:fill-accent/25 active:fill-accent/40'
+
+/** Tap target over the shared body figure; the labelled buttons next to it are the accessible control. */
 export function BodyFigure({ onPick }: { onPick: (area: AreaId) => void }) {
+  const id = useId().replace(/:/g, '')
   return (
-    <svg viewBox="22 4 156 410" className="h-full w-full drop-shadow-[0_0_24px_rgb(125_211_252/0.15)]" aria-hidden>
-      {/* Whole body and skin: a soft halo around the figure. */}
-      <g onClick={() => onPick('body')} className="cursor-pointer">
-        <ellipse cx="100" cy="210" rx="78" ry="204" className="fill-transparent stroke-accent/15 hover:stroke-accent/40" strokeDasharray="3 6" strokeWidth="1.5" />
-      </g>
-      {ZONES.map(({ area, shapes }) => (
-        <g
-          key={area}
-          onClick={() => onPick(area)}
-          className="cursor-pointer fill-white/[0.05] stroke-accent/50 transition-colors duration-200 hover:fill-accent/25 active:fill-accent/40"
-          strokeWidth="1.5"
-        >
-          {shapes}
-        </g>
-      ))}
+    <svg viewBox="22 4 156 412" className="h-full w-full" aria-hidden>
+      <defs>
+        {BANDS.map((b) => (
+          <clipPath key={b.area} id={`${id}-${b.area}`}>
+            <rect x="0" y={b.y} width="200" height={b.h} />
+          </clipPath>
+        ))}
+        <clipPath id={`${id}-legs`}>
+          <rect x="0" y="218" width="200" height="210" />
+        </clipPath>
+      </defs>
+      {/* Whole body and skin: a dashed aura around the figure. */}
+      <ellipse
+        cx="100"
+        cy="212"
+        rx="76"
+        ry="204"
+        onClick={() => onPick('body')}
+        className="cursor-pointer fill-transparent stroke-accent/15 transition-colors hover:stroke-accent/50"
+        strokeDasharray="3 6"
+        strokeWidth="1.5"
+      />
+      <BodySilhouette
+        interactive={
+          <>
+            <path d={BODY_OUTLINE.head} onClick={() => onPick('head')} className={ZONE} />
+            {BANDS.map((b) => (
+              <path
+                key={b.area}
+                d={BODY_OUTLINE.torso}
+                clipPath={`url(#${id}-${b.area})`}
+                onClick={() => onPick(b.area)}
+                className={ZONE}
+              />
+            ))}
+            <g onClick={() => onPick('muscles')} className={ZONE}>
+              <path d={BODY_OUTLINE.leftArm} />
+              <path d={BODY_OUTLINE.rightArm} />
+              <path d={BODY_OUTLINE.torso} clipPath={`url(#${id}-legs)`} />
+            </g>
+          </>
+        }
+      />
     </svg>
   )
 }

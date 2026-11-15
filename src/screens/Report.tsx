@@ -117,7 +117,7 @@ export function Report() {
   }
   const share = async () => {
     try {
-      await navigator.share({ title: 'AstroVitals health report', text })
+      await navigator.share({ title: 'Tether health report', text })
       flash('share')
     } catch {
       // Closing the share sheet is not an error.
@@ -127,7 +127,7 @@ export function Report() {
     const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }))
     const a = document.createElement('a')
     a.href = url
-    a.download = `astrovitals-report-${stamp(input.generatedAt).replace(/[ :]/g, '-')}.txt`
+    a.download = `tether-report-${stamp(input.generatedAt).replace(/[ :]/g, '-')}.txt`
     a.click()
     URL.revokeObjectURL(url)
     flash('download')
