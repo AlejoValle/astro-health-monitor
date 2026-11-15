@@ -19,6 +19,7 @@ export interface MindCheck {
   lapses?: number
   falseStarts?: number
   responses?: number
+  origin?: 'simulated'
 }
 
 export interface Workout {
@@ -27,12 +28,22 @@ export interface Workout {
   locationId: LocationId
   blockId: string
   minutes: number
+  origin?: 'simulated'
+}
+
+/** An active dosimeter reading: total mission dose so far, in mSv. */
+export interface Dose {
+  id: number
+  at: number
+  mSv: number
+  origin: 'manual' | 'simulated'
 }
 
 export const db = new Dexie('astrovitals') as Dexie & {
   readings: EntityTable<Reading, 'id'>
   checks: EntityTable<MindCheck, 'id'>
   workouts: EntityTable<Workout, 'id'>
+  doses: EntityTable<Dose, 'id'>
 }
 
 db.version(1).stores({
@@ -44,6 +55,13 @@ db.version(2).stores({
 db.version(3).stores({
   workouts: '++id, at',
 })
+db.version(4).stores({
+  doses: '++id, at, origin',
+})
+
+export function addDose(mSv: number) {
+  return db.doses.add({ mSv, at: Date.now(), origin: 'manual' })
+}
 
 export function addReading(indicatorId: IndicatorId, values: number[], origin: Reading['origin'] = 'manual') {
   return db.readings.add({ indicatorId, values, at: Date.now(), origin })

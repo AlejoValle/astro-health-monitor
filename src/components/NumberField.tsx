@@ -1,5 +1,6 @@
 import { Minus, Plus } from 'lucide-react'
 import type { IndicatorField } from '../data/indicators'
+import { useT } from '../i18n'
 import { parseField } from '../lib/fields'
 
 const decimals = (step: number) => (String(step).split('.')[1] ?? '').length
@@ -15,6 +16,8 @@ export function NumberField({
   value: string
   onChange: (text: string) => void
 }) {
+  const t = useT()
+  const label = t(field.label)
   const invalid = value.trim() !== '' && parseField(field, value) === undefined
 
   const nudge = (direction: 1 | -1) => {
@@ -26,13 +29,13 @@ export function NumberField({
   return (
     <div>
       <label htmlFor={`field-${field.key}`} className="label">
-        {field.label}
+        {label}
       </label>
       <div className="mt-2 flex items-center gap-2">
         <button
           type="button"
           onClick={() => nudge(-1)}
-          aria-label={`Lower ${field.label}`}
+          aria-label={t('Lower {label}', { label })}
           className="panel flex size-14 shrink-0 items-center justify-center rounded-2xl active:bg-panel-2"
         >
           <Minus size={22} aria-hidden />
@@ -57,7 +60,7 @@ export function NumberField({
         <button
           type="button"
           onClick={() => nudge(1)}
-          aria-label={`Raise ${field.label}`}
+          aria-label={t('Raise {label}', { label })}
           className="panel flex size-14 shrink-0 items-center justify-center rounded-2xl active:bg-panel-2"
         >
           <Plus size={22} aria-hidden />
@@ -65,7 +68,7 @@ export function NumberField({
       </div>
       {invalid && (
         <p className="mt-1.5 text-xs text-alert">
-          Enter a value between {field.min} and {field.max}.
+          {t('Enter a value between {min} and {max}.', { min: field.min, max: field.max })}
         </p>
       )}
     </div>

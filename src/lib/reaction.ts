@@ -1,4 +1,5 @@
 import { median } from './bluetooth'
+import { msg } from '../i18n/msg'
 import type { Assessment } from './rules'
 
 // Timing follows the brief psychomotor vigilance test (PVT-B) used for the Reaction Self-Test
@@ -36,7 +37,7 @@ export function summarize(reactionTimes: number[], earlyTaps: number): ReactionS
  */
 export function assessReaction(summary: ReactionSummary, baselineMs?: number): Assessment {
   if (summary.responses < MIN_RESPONSES)
-    return { status: 'watch', label: 'Not enough taps', advice: 'Repeat the test and tap each time the counter starts.', escalate: false }
+    return { status: 'watch', label: msg('Not enough taps'), advice: msg('Repeat the test and tap each time the counter starts.'), escalate: false }
 
   const lapseRate = summary.lapses / summary.responses
   const slowdown = baselineMs ? summary.medianMs / baselineMs : 1
@@ -44,21 +45,21 @@ export function assessReaction(summary: ReactionSummary, baselineMs?: number): A
   if (lapseRate >= 0.25 || slowdown >= 1.2)
     return {
       status: 'alert',
-      label: baselineMs ? 'Much slower than usual' : 'Many slow responses',
-      advice: 'You may be fatigued. Avoid critical tasks if you can and plan a sleep period.',
+      label: baselineMs ? msg('Much slower than usual') : msg('Many slow responses'),
+      advice: msg('You may be fatigued. Avoid critical tasks if you can and plan a sleep period.'),
       escalate: false,
     }
   if (lapseRate >= 0.1 || slowdown >= 1.1)
     return {
       status: 'watch',
-      label: baselineMs ? 'Slower than usual' : 'Some slow responses',
-      advice: 'Take a break before demanding tasks and test again after resting.',
+      label: baselineMs ? msg('Slower than usual') : msg('Some slow responses'),
+      advice: msg('Take a break before demanding tasks and test again after resting.'),
       escalate: false,
     }
   return {
     status: 'ok',
-    label: baselineMs ? 'As sharp as usual' : 'Baseline saved',
-    advice: baselineMs ? 'Keep your sleep schedule.' : 'Repeat the test on other days to build your own baseline.',
+    label: baselineMs ? msg('As sharp as usual') : msg('Baseline saved'),
+    advice: baselineMs ? msg('Keep your sleep schedule.') : msg('Repeat the test on other days to build your own baseline.'),
     escalate: false,
   }
 }

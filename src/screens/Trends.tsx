@@ -1,4 +1,6 @@
 import Dexie from 'dexie'
+import { useLocale, useT } from '../i18n'
+import { msg } from '../i18n/msg'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, FlaskConical } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -18,12 +20,12 @@ const STATUS_COLOR: Record<Status, string> = {
 }
 const LINE_COLOR = ['var(--color-accent)', '#a5b4fc']
 const DIRECTION: Record<Direction, { icon: typeof ArrowRight; text: string }> = {
-  up: { icon: ArrowUpRight, text: 'Going up' },
-  down: { icon: ArrowDownRight, text: 'Going down' },
-  steady: { icon: ArrowRight, text: 'Steady' },
+  up: { icon: ArrowUpRight, text: msg('Going up') },
+  down: { icon: ArrowDownRight, text: msg('Going down') },
+  steady: { icon: ArrowRight, text: msg('Steady') },
 }
 
-const day = (at: number) => new Date(at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+const day = (at: number, locale: string) => new Date(at).toLocaleDateString(locale, { month: 'short', day: 'numeric' })
 const isIndicatorId = (id: string | null): id is IndicatorId => INDICATORS.some((i) => i.id === id)
 
 export function Trends() {
@@ -47,15 +49,16 @@ export function Trends() {
   )
   // useLiveQuery keeps the previous indicator's result until the new query resolves.
   const readings = loaded?.id === id ? loaded.readings : undefined
+  const t = useT()
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       <div>
-        <p className="label">Trends</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">{indicator.name}</h1>
+        <p className="label">{t('Trends')}</p>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight">{t(indicator.name)}</h1>
       </div>
 
-      <nav aria-label="Indicator" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
+      <nav aria-label={t('Indicator')} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
         {INDICATORS.map((i) => {
           const Icon = INDICATOR_ICON[i.id]
           const active = i.id === id
@@ -70,7 +73,7 @@ export function Trends() {
               }`}
             >
               <Icon size={16} aria-hidden />
-              {i.short}
+              {t(i.short)}
             </Link>
           )
         })}
@@ -78,12 +81,12 @@ export function Trends() {
 
       {readings && readings.length === 0 && (
         <section className="panel rounded-3xl p-6">
-          <p className="text-ink-dim">No readings yet.</p>
+          <p className="text-ink-dim">{t('No readings yet.')}</p>
           <Link
             to={`/measure?i=${id}`}
             className="mt-4 flex min-h-14 items-center justify-center rounded-2xl bg-ink font-semibold text-space"
           >
-            Measure now
+            {t('Measure now')}
           </Link>
         </section>
       )}
@@ -115,6 +118,8 @@ function TrendBody({ id, readings }: { id: IndicatorId; readings: Omit<Row, 'sta
   const pad = Math.max((high - low) * 0.15, indicator.fields[0].step)
   const domain = [Math.floor(low - pad), Math.ceil(high + pad)]
   const Trend = trend && DIRECTION[trend]
+  const t = useT()
+  const locale = useLocale()
 
   return (
     <>
@@ -124,20 +129,20 @@ function TrendBody({ id, readings }: { id: IndicatorId; readings: Omit<Row, 'sta
             {Trend ? (
               <>
                 <Trend.icon size={20} className="text-accent" aria-hidden />
-                {Trend.text}
+                {t(Trend.text)}
               </>
             ) : (
-              <span className="text-base font-normal text-ink-dim">Add 6 readings to see a trend</span>
+              <span className="text-base font-normal text-ink-dim">{t('Add 6 readings to see a trend')}</span>
             )}
           </p>
           {simulated && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-xs text-ink-dim">
               <FlaskConical size={12} aria-hidden />
-              Simulated data
+              {t('Simulated data')}
             </span>
           )}
         </div>
-        <div className="h-56" role="img" aria-label={`${indicator.name} over the last ${rows.length} readings`}>
+        <div className="h-56" role="img" aria-label={t('{name} over the last {n} readings', { name: t(indicator.name), n: rows.length })}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={rows} margin={{ top: 8, right: 12, bottom: 0, left: -18 }}>
               <CartesianGrid stroke="var(--color-line)" vertical={false} />
@@ -146,7 +151,7 @@ function TrendBody({ id, readings }: { id: IndicatorId; readings: Omit<Row, 'sta
                 type="number"
                 scale="time"
                 domain={['dataMin', 'dataMax']}
-                tickFormatter={day}
+                tickFormatter={(at: number) => day(at, locale)}
                 tick={{ fill: 'var(--color-ink-dim)', fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
@@ -205,24 +210,24 @@ function TrendBody({ id, readings }: { id: IndicatorId; readings: Omit<Row, 'sta
           {ranges.length === 1 ? (
             <>
               <span className="mr-1.5 inline-block size-2.5 rounded-sm bg-ok/40 align-middle" aria-hidden />
-              Green band: OK range.
+              {t('Green band: OK range.')}
             </>
           ) : (
-            'Dashed lines: top of the OK range for each number.'
+            t('Dashed lines: top of the OK range for each number.')
           )}{' '}
-          {outside} of {rows.length} readings were outside it.
+          {t('{n} of {total} readings were outside it.', { n: outside, total: rows.length })}
         </p>
       </section>
 
       <section className="panel rounded-3xl p-5">
-        <h2 className="label">Latest readings</h2>
+        <h2 className="label">{t('Latest readings')}</h2>
         <ul className="mt-2 divide-y divide-line">
           {rows
             .slice(-5)
             .reverse()
             .map((r) => (
               <li key={r.at} className="flex min-h-12 items-center gap-3 py-2">
-                <span className="w-16 text-sm text-ink-dim">{day(r.at)}</span>
+                <span className="w-16 text-sm text-ink-dim">{day(r.at, locale)}</span>
                 <span className="flex-1 whitespace-nowrap font-semibold tabular-nums">
                   {formatValue(id, r.values)} <span className="text-sm font-normal text-ink-dim">{indicator.unit}</span>
                 </span>
@@ -234,7 +239,7 @@ function TrendBody({ id, readings }: { id: IndicatorId; readings: Omit<Row, 'sta
           to={`/measure?i=${id}`}
           className="mt-4 flex min-h-14 items-center justify-center rounded-2xl bg-ink font-semibold text-space"
         >
-          Measure now
+          {t('Measure now')}
         </Link>
       </section>
     </>

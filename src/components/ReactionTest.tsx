@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useT } from '../i18n'
 import {
   ANTICIPATION_MS,
   FEEDBACK_MS,
@@ -19,6 +20,7 @@ export function ReactionTest({ durationMs, onDone }: { durationMs: number; onDon
   const reactionTimes = useRef<number[]>([])
   const earlyTaps = useRef(0)
   const done = useRef(onDone)
+  const t = useT()
 
   useEffect(() => {
     done.current = onDone
@@ -60,10 +62,10 @@ export function ReactionTest({ durationMs, onDone }: { durationMs: number; onDon
     if (trial.state === 'stimulus') {
       const rt = Math.round(performance.now() - onsetAt.current)
       reactionTimes.current.push(rt)
-      setTrial({ state: 'feedback', text: rt < ANTICIPATION_MS ? 'Too soon' : `${rt} ms` })
+      setTrial({ state: 'feedback', text: rt < ANTICIPATION_MS ? t('Too soon') : `${rt} ms` })
     } else if (trial.state === 'waiting') {
       earlyTaps.current += 1
-      setTrial({ state: 'feedback', text: 'Too soon' })
+      setTrial({ state: 'feedback', text: t('Too soon') })
     }
   }
 
@@ -74,7 +76,7 @@ export function ReactionTest({ durationMs, onDone }: { durationMs: number; onDon
       data-state={trial.state}
       className="fixed inset-0 z-50 flex touch-none select-none flex-col items-center justify-center bg-space"
     >
-      <span className="label absolute top-[max(1.5rem,env(safe-area-inset-top))]">{remaining} s left</span>
+      <span className="label absolute top-[max(1.5rem,env(safe-area-inset-top))]">{t('{s} s left', { s: remaining })}</span>
       <span
         className={`flex size-64 items-center justify-center rounded-full border-2 text-5xl font-semibold tabular-nums ${
           trial.state === 'stimulus' ? 'border-accent bg-accent/15 text-accent' : 'border-line text-ink-dim'
@@ -82,7 +84,7 @@ export function ReactionTest({ durationMs, onDone }: { durationMs: number; onDon
       >
         {trial.state === 'stimulus' ? elapsedMs : trial.state === 'feedback' ? trial.text : ''}
       </span>
-      <span className="mt-8 text-ink-dim">Tap anywhere when the counter starts</span>
+      <span className="mt-8 text-ink-dim">{t('Tap anywhere when the counter starts')}</span>
     </button>
   )
 }

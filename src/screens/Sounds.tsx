@@ -1,4 +1,5 @@
 import { AudioLines, CloudRain, Orbit, Pause, Play, Volume1, Volume2, Waves, Wind } from 'lucide-react'
+import { useT } from '../i18n'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { SourceList } from '../components/SourceList'
@@ -16,14 +17,15 @@ const ICON: Record<SoundId, LucideIcon> = {
 }
 
 export function Sounds() {
+  const t = useT()
   const { playing, volume, endsAt, timerMinutes, toggle, setVolume, setTimer } = useSoundPlayer()
   const minutesLeft = useMinutesLeft(endsAt)
 
   if (!audioSupported()) {
     return (
       <section className="panel mx-auto max-w-xl rounded-3xl p-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Sounds</h1>
-        <p className="mt-2 text-sm text-ink-dim">This browser cannot generate audio.</p>
+        <h1 className="text-2xl font-semibold tracking-tight">{t('Sounds')}</h1>
+        <p className="mt-2 text-sm text-ink-dim">{t('This browser cannot generate audio.')}</p>
       </section>
     )
   }
@@ -31,9 +33,9 @@ export function Sounds() {
   return (
     <div className="mx-auto max-w-xl space-y-4">
       <div>
-        <p className="label">Sounds</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">Pick a sound</h1>
-        <p className="mt-1 text-sm text-ink-dim">It keeps playing while you use other screens.</p>
+        <p className="label">{t('Sounds')}</p>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight">{t('Pick a sound')}</h1>
+        <p className="mt-1 text-sm text-ink-dim">{t('It keeps playing while you use other screens.')}</p>
       </div>
 
       <ul className="grid grid-cols-2 gap-3">
@@ -59,8 +61,8 @@ export function Sounds() {
                   </span>
                 </span>
                 <span>
-                  <span className="block font-semibold">{sound.name}</span>
-                  <span className="block text-xs text-ink-dim">{active ? 'Playing' : sound.hint}</span>
+                  <span className="block font-semibold">{t(sound.name)}</span>
+                  <span className="block text-xs text-ink-dim">{active ? t('Playing') : t(sound.hint)}</span>
                 </span>
               </button>
             </li>
@@ -70,7 +72,7 @@ export function Sounds() {
 
       <section className="panel space-y-5 rounded-3xl p-5">
         <label className="block">
-          <span className="label">Volume</span>
+          <span className="label">{t('Volume')}</span>
           <span className="mt-2 flex items-center gap-3">
             <Volume1 size={18} className="text-ink-dim" aria-hidden />
             <input
@@ -87,32 +89,37 @@ export function Sounds() {
         </label>
 
         <div>
-          <p className="label">Stop after</p>
+          <p className="label">{t('Stop after')}</p>
           <div className="mt-2 grid grid-cols-4 gap-2">
             <TimerChip active={endsAt === null} disabled={!playing} onClick={() => setTimer(null)}>
-              Off
+              {t('Off')}
             </TimerChip>
             {TIMER_MINUTES.map((minutes) => (
               <TimerChip key={minutes} active={timerMinutes === minutes} disabled={!playing} onClick={() => setTimer(minutes)}>
-                {minutes} min
+                {t('{n} min', { n: minutes })}
               </TimerChip>
             ))}
           </div>
           <p className="mt-2 min-h-5 text-sm text-ink-dim">
-            {minutesLeft !== null ? `Stops in ${minutesLeft} min` : playing ? '' : 'Start a sound to set a timer.'}
+            {minutesLeft !== null
+              ? t('Stops in {n} min', { n: minutesLeft })
+              : playing
+                ? ''
+                : t('Start a sound to set a timer.')}
           </p>
         </div>
       </section>
 
       <section className="panel rounded-3xl p-5">
-        <h2 className="label">Why it is here</h2>
+        <h2 className="label">{t('Why it is here')}</h2>
         <p className="mt-2 text-sm text-ink-dim">
-          Isolation, confinement and a noisy closed habitat make rest harder on a long mission. These sounds are for
-          comfort and rest. They are not a treatment.
+          {t(
+            'Isolation, confinement and a noisy closed habitat make rest harder on a long mission. These sounds are for comfort and rest. They are not a treatment.',
+          )}
         </p>
         <SourceList sourceIds={SOUND_SOURCE_IDS} />
         <p className="mt-3 text-xs text-ink-faint">
-          Generated on this device. Nothing is downloaded, so it works without a connection.
+          {t('Generated on this device. Nothing is downloaded, so it works without a connection.')}
         </p>
       </section>
     </div>

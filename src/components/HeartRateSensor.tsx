@@ -1,5 +1,6 @@
 import { Bluetooth, BluetoothConnected, BluetoothOff, HeartPulse } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { useT } from '../i18n'
 import { bluetoothSupported, connectHeartRate, median, type HeartRateLink } from '../lib/bluetooth'
 
 const MIN_SAMPLES = 5
@@ -12,6 +13,7 @@ export function HeartRateSensor({ onSave }: { onSave: (bpm: number) => void }) {
   const [deviceName, setDeviceName] = useState('')
   const [samples, setSamples] = useState<number[]>([])
   const link = useRef<HeartRateLink | null>(null)
+  const t = useT()
 
   useEffect(() => () => link.current?.disconnect(), [])
 
@@ -19,7 +21,7 @@ export function HeartRateSensor({ onSave }: { onSave: (bpm: number) => void }) {
     return (
       <div className="panel flex items-center gap-3 rounded-2xl p-4 text-sm text-ink-dim">
         <BluetoothOff size={20} className="shrink-0" aria-hidden />
-        Bluetooth sensors are not available in this browser. Enter your pulse by hand below.
+        {t('Bluetooth sensors are not available in this browser. Enter your pulse by hand below.')}
       </div>
     )
   }
@@ -56,7 +58,7 @@ export function HeartRateSensor({ onSave }: { onSave: (bpm: number) => void }) {
           <span className="text-ink-dim">bpm</span>
         </p>
         <p className="mt-1 text-center text-xs text-ink-dim">
-          {ready ? 'Steady. Saves the middle value of the last readings.' : 'Stay still. Reading your pulse…'}
+          {ready ? t('Steady. Saves the middle value of the last readings.') : t('Stay still. Reading your pulse…')}
         </p>
         <button
           type="button"
@@ -64,7 +66,7 @@ export function HeartRateSensor({ onSave }: { onSave: (bpm: number) => void }) {
           onClick={() => onSave(median(samples))}
           className="mt-4 flex min-h-14 w-full items-center justify-center rounded-2xl bg-ink font-semibold text-space disabled:opacity-40"
         >
-          {ready ? `Save ${median(samples)} bpm` : 'Reading…'}
+          {ready ? t('Save {bpm} bpm', { bpm: median(samples) }) : t('Reading…')}
         </button>
       </div>
     )
@@ -79,11 +81,11 @@ export function HeartRateSensor({ onSave }: { onSave: (bpm: number) => void }) {
         className="glass flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl font-semibold disabled:opacity-60"
       >
         <Bluetooth size={20} className="text-accent" aria-hidden />
-        {phase === 'connecting' ? 'Connecting…' : 'Connect a heart rate sensor'}
+        {phase === 'connecting' ? t('Connecting…') : t('Connect a heart rate sensor')}
       </button>
       {phase === 'failed' && (
         <p className="mt-2 text-sm text-alert" role="alert">
-          Could not connect. Check that the sensor is on and worn, then try again or enter your pulse by hand.
+          {t('Could not connect. Check that the sensor is on and worn, then try again or enter your pulse by hand.')}
         </p>
       )}
     </div>

@@ -1,5 +1,6 @@
 import type { IndicatorId } from '../data/indicators'
-import { db, type Reading } from './db'
+import { db, type Dose, type MindCheck, type Reading, type Workout } from './db'
+import { useSettings } from './store'
 
 const DAY = 24 * 60 * 60 * 1000
 
@@ -38,11 +39,51 @@ export function simulatedMission(now = Date.now(), days = 14): Omit<Reading, 'id
   return rows
 }
 
+/** Simulated active dosimeter readings, one a week, at about 0.35 mSv per day (ISS range). */
+export function simulatedDoses(now = Date.now(), days = 14): Omit<Dose, 'id'>[] {
+  return [days, 7, 1].map((d) => ({
+    at: now - d * DAY,
+    mSv: Math.round((days - d) * 0.35 * 10) / 10,
+    origin: 'simulated' as const,
+  }))
+}
+
+/** Simulated exercise on most days, and mind checks every few days, so the routine has history. */
+export function simulatedActivity(now = Date.now(), days = 14) {
+  const workouts: Omit<Workout, 'id'>[] = []
+  const checks: Omit<MindCheck, 'id'>[] = []
+  for (let d = days - 1; d >= 1; d--) {
+    const day = now - d * DAY
+    if (d % 5 !== 3) workouts.push({ at: day, locationId: 'orbit', blockId: 'resistance', minutes: 30, origin: 'simulated' })
+    if (d % 3 === 1) checks.push({ kind: 'stress', at: day, score: 3 + ((days - d) >> 2), origin: 'simulated' })
+    if (d % 7 === 6)
+      checks.push({ kind: 'reaction', at: day, score: 290 + (days - d) * 3, lapses: 1, falseStarts: 0, responses: 60, origin: 'simulated' })
+  }
+  return { workouts, checks }
+}
+
+// Each runs in one transaction, so the app sees a single change and does not
+// celebrate the simulated history as if the crew member had just earned it.
 export async function loadSimulatedMission() {
-  await db.readings.where('origin').equals('simulated').delete()
-  await db.readings.bulkAdd(simulatedMission() as Reading[])
+  const { workouts, checks } = simulatedActivity()
+  await db.transaction('rw', [db.readings, db.doses, db.workouts, db.checks], async () => {
+    await deleteSimulated()
+    await db.readings.bulkAdd(simulatedMission() as Reading[])
+    await db.doses.bulkAdd(simulatedDoses() as Dose[])
+    await db.workouts.bulkAdd(workouts as Workout[])
+    await db.checks.bulkAdd(checks as MindCheck[])
+  })
+  const { missionStart, setMission } = useSettings.getState()
+  if (missionStart === null) setMission({ missionStart: Date.now() - 14 * DAY })
 }
 
 export function clearSimulatedMission() {
-  return db.readings.where('origin').equals('simulated').delete()
+  return db.transaction('rw', [db.readings, db.doses, db.workouts, db.checks], deleteSimulated)
+}
+
+async function deleteSimulated() {
+  await db.readings.where('origin').equals('simulated').delete()
+  await db.doses.where('origin').equals('simulated').delete()
+  await db.workouts.filter((w) => w.origin === 'simulated').delete()
+  await db.checks.filter((c) => c.origin === 'simulated').delete()
 }

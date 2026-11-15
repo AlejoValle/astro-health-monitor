@@ -1,16 +1,19 @@
 import { Annoyed, Frown, Laugh, Meh, Smile } from 'lucide-react'
+import { useT } from '../i18n'
+import { msg } from '../i18n/msg'
 
 const FACES = [
-  { score: 1, label: 'Very low', icon: Frown },
-  { score: 2, label: 'Low', icon: Annoyed },
-  { score: 3, label: 'Neutral', icon: Meh },
-  { score: 4, label: 'Good', icon: Smile },
-  { score: 5, label: 'Great', icon: Laugh },
+  { score: 1, label: msg('Very low'), icon: Frown },
+  { score: 2, label: msg('Low'), icon: Annoyed },
+  { score: 3, label: msg('Neutral'), icon: Meh },
+  { score: 4, label: msg('Good'), icon: Smile },
+  { score: 5, label: msg('Great'), icon: Laugh },
 ]
 
 export function MoodPicker({ value, onChange }: { value?: number; onChange: (score: number) => void }) {
+  const t = useT()
   return (
-    <div className="grid grid-cols-5 gap-2" role="radiogroup" aria-label="Mood">
+    <div className="grid grid-cols-5 gap-2" role="radiogroup" aria-label={t('Mood')}>
       {FACES.map(({ score, label, icon: Icon }) => {
         const active = value === score
         return (
@@ -25,7 +28,7 @@ export function MoodPicker({ value, onChange }: { value?: number; onChange: (sco
             }`}
           >
             <Icon size={30} strokeWidth={1.5} aria-hidden />
-            <span className="text-[0.6875rem] font-medium">{label}</span>
+            <span className="text-[0.6875rem] font-medium">{t(label)}</span>
           </button>
         )
       })}

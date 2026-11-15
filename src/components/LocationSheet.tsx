@@ -1,6 +1,7 @@
 import { Check, Earth, MoonStar, Mountain, Rocket, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { LOCATIONS, type LocationId } from '../data/locations'
+import { useT } from '../i18n'
 import { useSettings } from '../lib/store'
 
 export const LOCATION_ICON: Record<LocationId, typeof Earth> = {
@@ -12,6 +13,7 @@ export const LOCATION_ICON: Record<LocationId, typeof Earth> = {
 
 export function LocationSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { locationId, setLocation } = useSettings()
+  const t = useT()
 
   return (
     <AnimatePresence>
@@ -27,7 +29,7 @@ export function LocationSheet({ open, onClose }: { open: boolean; onClose: () =>
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label="Choose location"
+            aria-label={t('Choose location')}
             className="glass glass-sheet relative w-full max-w-md rounded-t-[32px] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] lg:rounded-[32px]"
             initial={{ y: 60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -36,13 +38,13 @@ export function LocationSheet({ open, onClose }: { open: boolean; onClose: () =>
           >
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <p className="label">Mission</p>
-                <h2 className="text-xl font-semibold">Where are you?</h2>
+                <p className="label">{t('Mission')}</p>
+                <h2 className="text-xl font-semibold">{t('Where are you?')}</h2>
               </div>
               <button
                 type="button"
                 onClick={onClose}
-                aria-label="Close"
+                aria-label={t('Close')}
                 className="flex size-12 items-center justify-center rounded-full bg-white/10"
               >
                 <X size={20} />
@@ -67,9 +69,9 @@ export function LocationSheet({ open, onClose }: { open: boolean; onClose: () =>
                     >
                       <Icon size={24} strokeWidth={1.5} className={active ? 'text-accent' : 'text-ink-dim'} />
                       <span className="flex-1">
-                        <span className="block font-medium">{l.name}</span>
+                        <span className="block font-medium">{t(l.name)}</span>
                         <span className="block text-sm text-ink-dim">
-                          {l.gravity} · {l.contactLabel}
+                          {t(l.gravity)} · {t(l.contactLabel)}
                         </span>
                       </span>
                       {active && <Check size={20} className="text-accent" />}

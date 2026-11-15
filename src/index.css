@@ -82,3 +82,121 @@ body {
     background: var(--color-panel-2);
   }
 }
+
+/* ---------- Motion ----------
+   One easing for the whole app: fast start, soft settle. Every effect is off with reduced motion. */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-ring {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Each screen's top-level blocks, and any .reveal-list, rise in one after another. */
+.page > :not(.no-rise) > *,
+.reveal-list > * {
+  animation: rise 0.9s var(--ease-out-expo) both;
+}
+.page > :not(.no-rise) > :nth-child(2),
+.reveal-list > :nth-child(2) {
+  animation-delay: 70ms;
+}
+.page > :not(.no-rise) > :nth-child(3),
+.reveal-list > :nth-child(3) {
+  animation-delay: 140ms;
+}
+.page > :not(.no-rise) > :nth-child(4),
+.reveal-list > :nth-child(4) {
+  animation-delay: 210ms;
+}
+.page > :not(.no-rise) > :nth-child(5),
+.reveal-list > :nth-child(5) {
+  animation-delay: 280ms;
+}
+.page > :not(.no-rise) > :nth-child(6),
+.reveal-list > :nth-child(6) {
+  animation-delay: 350ms;
+}
+.page > :not(.no-rise) > :nth-child(7),
+.reveal-list > :nth-child(7) {
+  animation-delay: 420ms;
+}
+.page > :not(.no-rise) > :nth-child(n + 8),
+.reveal-list > :nth-child(n + 8) {
+  animation-delay: 490ms;
+}
+.reveal-slow > * {
+  animation-duration: 1.2s;
+}
+
+.page-header {
+  animation: fade-in 0.8s var(--ease-out-expo) both;
+}
+
+/* Tap feedback on anything that looks pressable. */
+a.panel,
+button.panel,
+.press {
+  transition:
+    transform 0.2s var(--ease-out-expo),
+    background-color 0.2s;
+}
+a.panel:active,
+button.panel:active,
+.press:active {
+  transform: scale(0.97);
+}
+
+/* A soft ring that keeps expanding around a status that needs attention. */
+.pulse-ring {
+  animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page > :not(.no-rise) > *,
+  .reveal-list > *,
+  .page-header,
+  .pulse-ring {
+    animation: none;
+  }
+  a.panel:active,
+  button.panel:active,
+  .press:active {
+    transform: none;
+  }
+}
+
+@keyframes grow-up {
+  from {
+    transform: scaleY(0);
+  }
+}
+.level-bar {
+  animation: grow-up 0.7s var(--ease-out-expo) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .level-bar {
+    animation: none;
+  }
+}

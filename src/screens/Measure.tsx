@@ -8,6 +8,7 @@ import { NumberField } from '../components/NumberField'
 import { ResultPanel } from '../components/ResultPanel'
 import { INDICATORS, type Indicator } from '../data/indicators'
 import { addReading, type Reading } from '../lib/db'
+import { useT } from '../i18n'
 import { parseField } from '../lib/fields'
 
 export function Measure() {
@@ -17,10 +18,11 @@ export function Measure() {
 }
 
 function IndicatorPicker() {
+  const t = useT()
   return (
     <div className="mx-auto max-w-xl">
-      <p className="label">Measure</p>
-      <h1 className="mt-1 text-3xl font-semibold tracking-tight">What do you want to check?</h1>
+      <p className="label">{t('Measure')}</p>
+      <h1 className="mt-1 text-3xl font-semibold tracking-tight">{t('What do you want to check?')}</h1>
       <ul className="mt-5 space-y-2">
         {INDICATORS.map((indicator) => {
           const Icon = INDICATOR_ICON[indicator.id]
@@ -31,7 +33,7 @@ function IndicatorPicker() {
                 className="panel flex min-h-16 items-center gap-4 rounded-2xl px-4 active:bg-panel-2"
               >
                 <Icon size={24} strokeWidth={1.5} className="text-accent" aria-hidden />
-                <span className="flex-1 font-medium">{indicator.name}</span>
+                <span className="flex-1 font-medium">{t(indicator.name)}</span>
                 <ChevronRight size={18} className="text-ink-faint" aria-hidden />
               </Link>
             </li>
@@ -45,6 +47,7 @@ function IndicatorPicker() {
 function MeasureIndicator({ indicator }: { indicator: Indicator }) {
   const [texts, setTexts] = useState<string[]>(() => indicator.fields.map(() => ''))
   const [saved, setSaved] = useState<number[] | null>(null)
+  const t = useT()
 
   const save = async (values: number[], origin: Reading['origin']) => {
     await addReading(indicator.id, values, origin)
@@ -63,27 +66,27 @@ function MeasureIndicator({ indicator }: { indicator: Indicator }) {
   const parsed = indicator.fields.map((field, i) => parseField(field, texts[i]))
   const complete = parsed.every((v) => v !== undefined)
   const bpOrderWrong = indicator.id === 'bp' && complete && parsed[0]! <= parsed[1]!
-  const setText = (i: number, text: string) => setTexts((t) => t.map((old, j) => (j === i ? text : old)))
+  const setText = (i: number, text: string) => setTexts((all) => all.map((old, j) => (j === i ? text : old)))
 
   return (
     <div className="mx-auto max-w-xl space-y-5">
       <div>
         <Link to="/measure" className="-ml-2 inline-flex min-h-12 items-center gap-1 pr-3 text-sm text-ink-dim">
           <ChevronLeft size={18} aria-hidden />
-          All checks
+          {t('All checks')}
         </Link>
-        <h1 className="text-3xl font-semibold tracking-tight">{indicator.name}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">{t(indicator.name)}</h1>
       </div>
 
       <section className="panel rounded-3xl p-5">
-        <h2 className="label">How to measure</h2>
+        <h2 className="label">{t('How to measure')}</h2>
         <ol className="mt-3 space-y-3">
           {indicator.howTo.map((step, i) => (
             <li key={step} className="flex gap-3">
               <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
                 {i + 1}
               </span>
-              <span className="pt-0.5">{step}</span>
+              <span className="pt-0.5">{t(step)}</span>
             </li>
           ))}
         </ol>
@@ -92,7 +95,7 @@ function MeasureIndicator({ indicator }: { indicator: Indicator }) {
       {indicator.id === 'hr' && (
         <>
           <HeartRateSensor onSave={(bpm) => void save([bpm], 'sensor')} />
-          <p className="label text-center">or enter it by hand</p>
+          <p className="label text-center">{t('or enter it by hand')}</p>
         </>
       )}
 
@@ -114,7 +117,7 @@ function MeasureIndicator({ indicator }: { indicator: Indicator }) {
 
       {bpOrderWrong && (
         <p className="text-sm text-alert" role="alert">
-          The top number must be higher than the bottom number.
+          {t('The top number must be higher than the bottom number.')}
         </p>
       )}
 
@@ -124,7 +127,7 @@ function MeasureIndicator({ indicator }: { indicator: Indicator }) {
         onClick={() => void save(parsed as number[], 'manual')}
         className="flex min-h-14 w-full items-center justify-center rounded-2xl bg-ink font-semibold text-space disabled:opacity-40"
       >
-        Save and check
+        {t('Save and check')}
       </button>
     </div>
   )

@@ -14,6 +14,7 @@ import {
 } from '../data/exercise'
 import { INDICATORS } from '../data/indicators'
 import { locationById } from '../data/locations'
+import { useT } from '../i18n'
 import { addWorkout, db } from '../lib/db'
 import { assess } from '../lib/rules'
 import { useSettings } from '../lib/store'
@@ -41,6 +42,7 @@ function Plan() {
   const plan = EXERCISE_PLANS[locationId]
   const latest = useLatest()
   const today = useLiveQuery(() => db.workouts.where('at').aboveOrEqual(startOfDay(Date.now())).toArray(), [])
+  const t = useT()
   if (!today || !latest) return null
 
   const done = minutesByBlock(today)
@@ -54,22 +56,24 @@ function Plan() {
   return (
     <div className="mx-auto max-w-xl space-y-4">
       <div>
-        <p className="label">Exercise · {location.name}</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">Today's plan</h1>
-        <p className="mt-1 text-sm text-ink-dim">{location.gravity}</p>
+        <p className="label">
+          {t('Exercise')} · {t(location.name)}
+        </p>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight">{t("Today's plan")}</h1>
+        <p className="mt-1 text-sm text-ink-dim">{t(location.gravity)}</p>
       </div>
 
       {needsAction && (
         <Link to="/" className="block rounded-3xl border border-alert/40 bg-alert/10 p-4">
-          <span className="font-semibold text-alert">One of your checks needs action</span>
-          <span className="mt-1 block text-sm text-ink-dim">Review it on Home before you exercise.</span>
+          <span className="font-semibold text-alert">{t('One of your checks needs action')}</span>
+          <span className="mt-1 block text-sm text-ink-dim">{t('Review it on Home before you exercise.')}</span>
         </Link>
       )}
 
       <section className="panel rounded-3xl p-5">
         <p className="flex items-baseline gap-2">
           <span className="text-5xl font-semibold tabular-nums tracking-tight">{total}</span>
-          <span className="text-ink-dim">of {target} min today</span>
+          <span className="text-ink-dim">{t('of {n} min today', { n: target })}</span>
         </p>
         <div
           className="mt-3 h-2 overflow-hidden rounded-full bg-panel-2"
@@ -80,7 +84,7 @@ function Plan() {
         >
           <div className="h-full rounded-full bg-accent" style={{ width: `${Math.min(100, (total / target) * 100)}%` }} />
         </div>
-        <p className="mt-3 text-sm text-ink-dim">{plan.note}</p>
+        <p className="mt-3 text-sm text-ink-dim">{t(plan.note)}</p>
       </section>
 
       <ul className="space-y-3">
@@ -98,15 +102,17 @@ function Plan() {
                   <Icon size={26} strokeWidth={1.5} aria-hidden />
                 </span>
                 <span className="flex-1">
-                  <span className="block text-lg font-semibold">{block.name}</span>
+                  <span className="block text-lg font-semibold">{t(block.name)}</span>
                   <span className="block text-sm text-ink-dim">
-                    {minutes > 0 ? `${minutes} of ${block.minutes} min` : `${block.minutes} min`}
+                    {minutes > 0
+                      ? t('{n} of {total} min', { n: minutes, total: block.minutes })
+                      : t('{n} min', { n: block.minutes })}
                   </span>
                 </span>
                 {complete ? (
                   <span className="flex items-center gap-1 text-sm font-medium text-ok">
                     <Check size={18} aria-hidden />
-                    Done
+                    {t('Done')}
                   </span>
                 ) : (
                   <ChevronRight size={18} className="shrink-0 text-ink-faint" aria-hidden />
@@ -118,10 +124,12 @@ function Plan() {
       </ul>
 
       <section className="panel rounded-3xl p-5">
-        <h2 className="label">Based on</h2>
+        <h2 className="label">{t('Based on')}</h2>
         <SourceList sourceIds={plan.sourceIds} />
         <p className="mt-3 text-xs text-ink-faint">
-          The session lengths are a suggestion written for this app. Your mission exercise prescription comes first.
+          {t(
+            'The session lengths are a suggestion written for this app. Your mission exercise prescription comes first.',
+          )}
         </p>
       </section>
     </div>
@@ -143,6 +151,7 @@ function BlockSession({ block }: { block: ExerciseBlock }) {
   const [runningSince, setRunningSince] = useState<number | null>(null)
   const [now, setNow] = useState(0)
   const saving = useRef(false)
+  const t = useT()
 
   useEffect(() => {
     if (runningSince === null) return
@@ -176,15 +185,15 @@ function BlockSession({ block }: { block: ExerciseBlock }) {
       <div>
         <Link to="/exercise" className="-ml-2 inline-flex min-h-12 items-center gap-1 pr-3 text-sm text-ink-dim">
           <ChevronLeft size={18} aria-hidden />
-          Plan
+          {t('Plan')}
         </Link>
         <div className="flex items-center gap-3">
           <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/10 text-accent">
             <Icon size={24} strokeWidth={1.5} aria-hidden />
           </span>
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">{block.name}</h1>
-            <p className="text-sm text-ink-dim">{block.minutes} min</p>
+            <h1 className="text-2xl font-semibold tracking-tight">{t(block.name)}</h1>
+            <p className="text-sm text-ink-dim">{t('{n} min', { n: block.minutes })}</p>
           </div>
         </div>
       </div>
@@ -193,31 +202,31 @@ function BlockSession({ block }: { block: ExerciseBlock }) {
         <p className="text-6xl font-semibold tabular-nums tracking-tight" aria-live="off">
           {clock(elapsedMs)}
         </p>
-        <p className="mt-1 text-sm text-ink-dim">of {block.minutes}:00</p>
+        <p className="mt-1 text-sm text-ink-dim">{t('of {time}', { time: `${block.minutes}:00` })}</p>
         <button
           type="button"
           onClick={toggle}
           className="mt-4 flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-ink font-semibold text-space"
         >
           {runningSince === null ? <Play size={20} aria-hidden /> : <Pause size={20} aria-hidden />}
-          {runningSince !== null ? 'Pause' : elapsedMs > 0 ? 'Resume' : 'Start'}
+          {runningSince !== null ? t('Pause') : elapsedMs > 0 ? t('Resume') : t('Start')}
         </button>
       </section>
 
       <section className="panel rounded-3xl p-5">
-        <h2 className="label">What to do</h2>
+        <h2 className="label">{t('What to do')}</h2>
         <ol className="mt-3 space-y-3">
           {block.steps.map((step, i) => (
             <li key={step} className="flex gap-3">
               <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
                 {i + 1}
               </span>
-              <span className="pt-0.5 text-lg leading-snug">{step}</span>
+              <span className="pt-0.5 text-lg leading-snug">{t(step)}</span>
             </li>
           ))}
         </ol>
-        <h2 className="label mt-5">Why it matters here</h2>
-        <p className="mt-2 text-sm text-ink-dim">{block.why}</p>
+        <h2 className="label mt-5">{t('Why it matters here')}</h2>
+        <p className="mt-2 text-sm text-ink-dim">{t(block.why)}</p>
       </section>
 
       <div className="grid grid-cols-2 gap-3">
@@ -227,10 +236,10 @@ function BlockSession({ block }: { block: ExerciseBlock }) {
           onClick={() => void log(elapsedMin)}
           className="panel min-h-14 rounded-2xl px-3 font-medium disabled:opacity-40"
         >
-          {elapsedMin < 1 ? 'Save timed session' : `Save ${elapsedMin} min`}
+          {elapsedMin < 1 ? t('Save timed session') : t('Save {n} min', { n: elapsedMin })}
         </button>
         <button type="button" onClick={() => void log(block.minutes)} className="panel min-h-14 rounded-2xl px-3 font-medium">
-          I did all {block.minutes} min
+          {t('I did all {n} min', { n: block.minutes })}
         </button>
       </div>
     </div>

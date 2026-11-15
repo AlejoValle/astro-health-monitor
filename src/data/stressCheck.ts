@@ -1,4 +1,5 @@
 import type { Assessment } from '../lib/rules'
+import { msg } from '../i18n/msg'
 
 // App-authored check-in, not a validated clinical scale. The questions follow the behavioral
 // risks NASA HRP tracks (isolation and confinement, workload, teamwork). The bands below are
@@ -23,16 +24,16 @@ export function assessStress(score: number): Assessment {
   if (score >= 10)
     return {
       status: 'alert',
-      label: 'High strain',
-      advice: 'Pause if you can, talk with a crewmate and ask for a private conference with the ground team.',
+      label: msg('High strain'),
+      advice: msg('Pause if you can, talk with a crewmate and ask for a private conference with the ground team.'),
       escalate: false,
     }
   if (score >= 5)
     return {
       status: 'watch',
-      label: 'Building up',
-      advice: 'Take a short break, play a calming sound and check in again tomorrow.',
+      label: msg('Building up'),
+      advice: msg('Take a short break, play a calming sound and check in again tomorrow.'),
       escalate: false,
     }
-  return { status: 'ok', label: 'Low strain', advice: 'Keep doing what works for you.', escalate: false }
+  return { status: 'ok', label: msg('Low strain'), advice: msg('Keep doing what works for you.'), escalate: false }
 }
